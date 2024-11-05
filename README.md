@@ -7,7 +7,7 @@ Questo progetto è uno script bash che esegue una serie di operazioni per conver
 
 Prima di eseguire lo script, assicurati di avere nella cartella corrente i seguenti progetti:
 
-1. **[EDS-GEN](https://github.com/dadaynamo/EDS-GEN)**: Questo programma serve per convertire file EDS in formato RAW.
+1. **[EDS-GEN](https://github.com/dadaynamo/EDS_GEN)**: Questo programma serve per convertire file EDS in formato RAW.
 2. **[DNAStructureInfo](https://github.com/dadaynamo/DNAStructureInfo)**: Utilizzato per analizzare file BWT generati.
 3. **[gsufsort](https://github.com/felipelouza/gsufsort.gi)**: Serve a eseguire l'ordinamento BWT sui file RAW.
 
