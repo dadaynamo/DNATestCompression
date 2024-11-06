@@ -1,44 +1,32 @@
 #!/bin/bash
 
-# Nome del file EDS di input
-input_eds="input.eds"
-# Nome del file RAW di output dal programma edsToRaw
-output_raw="Outputraw.raw"
-# Nome del file BWT di output dal programma gsufsort
-output_bwt="Outputbwt.bwt"
-# Nome dell'archivio compresso finale
-output_archive="compressed_output.7z"
+cd EDS_GEN
 
-# Step 1: Convertire il file EDS in RAW usando edsToRaw
-echo "Converting EDS file to RAW format..."
-edsToRaw "$input_eds" --output "$output_raw"
-if [ $? -ne 0 ]; then
-    echo "Errore durante la conversione con edsToRaw."
-    exit 1
-fi
+# clicca 1 per creare un file
+# clicca 0 per scegliere un file
 
-# Step 2: Usare il file RAW come input per gsufsort con opzioni --txt e --bwt
-echo "Applying gsufsort to RAW file..."
-gsufsort "$output_raw" --txt --bwt --output "$output_bwt"
-if [ $? -ne 0 ]; then
-    echo "Errore durante l'elaborazione con gsufsort."
-    exit 1
-fi
+#if 1 per fare make raw
+make raw
 
-# Step 3: Comprimere il file BWT generato usando 7-Zip con metodo PPMd
-echo "Compressing BWT output with 7-Zip using PPMd..."
-7z a -m0=PPMd "$output_archive" "$output_bwt"
-if [ $? -ne 0 ]; then
-    echo "Errore durante la compressione con 7-Zip."
-    exit 1
-fi
+#else 0 per scegliere un file dalla lista dei sample
+#stampa la lista dei sample
+# seleziona file 
 
-# Step 4: Eseguire il programma DNAStructureInfo
-echo "Running DNAStructureInfo..."
-DNAStructureInfo "$output_bwt" # Aggiungi eventuali parametri necessari per DNAStructureInfo
-if [ $? -ne 0 ]; then
-    echo "Errore durante l'esecuzione di DNAStructureInfo."
-    exit 1
-fi
 
-echo "Operazione completata con successo! File compresso: $output_archive"
+# file creato / selezionato
+
+
+#creo nella cartella principale una directory chiamata file_compressed/
+
+
+# Se hai creato un RAW clicca 0
+    # Comprimo il file in tot modi diversi
+    # Confronto tra file
+
+
+
+# Se hai creato un EDS clicca 1
+    # Espansione del file eds in formato Raw
+    # Compressione sequenziale del file originale
+    # Confronto tra file
+

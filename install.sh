@@ -48,18 +48,7 @@ echo "] Completato!"
 
 clear
 
-cd EDS_GEN
-make raw
 
-#If vuoi creare un file raw clicca 1
-    # Se si allora creo file RAW
-    # Comprimo il file in tot modi diversi
-    # Confronto tra file
-
-    # Else creo il file EDS con X parametri
-    # Espansione del file eds in formato Raw
-    # Compressione sequenziale del file originale
-    # Confronto tra file
 
 
 
