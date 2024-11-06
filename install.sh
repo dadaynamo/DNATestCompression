@@ -45,7 +45,10 @@ for ((i = 0; i <= 50; i++)); do
     echo -n "#"
 done
 echo "] Completato!"
-
+sleep 1
+clear
+echo "\ Ora puoi avviare DNATestCompression.sh per eseguire la procedura /"
+sleep 3
 clear
 
 
