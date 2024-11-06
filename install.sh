@@ -23,6 +23,9 @@ cd ..
 cd /DNAStructureInfo
 make
 cd ..
+cd /gsufsort
+make 
+cd ..
 
 
 echo -n "Caricamento: ["
