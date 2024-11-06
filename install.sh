@@ -17,15 +17,25 @@ for repo in "${repos[@]}"; do
 done
 
 # Compilazione delle varie repo
-cd /EDS_GEN
-make
-cd ..
-cd /DNAStructureInfo
-make
-cd ..
-cd /gsufsort
-make 
-cd ..
+# Scorri tutte le cartelle nella directory corrente
+for dir in */ ; do
+    # Controlla se è effettivamente una directory
+    if [ -d "$dir" ]; then
+        echo "Entrando nella cartella $dir"
+        cd "$dir"
+        
+        # Esegui 'make' solo se un Makefile è presente
+        if [ -f "Makefile" ] || [ -f "makefile" ]; then
+            echo "Eseguendo 'make' in $dir"
+            make
+        else
+            echo "Nessun Makefile trovato in $dir, saltando."
+        fi
+        
+        # Torna alla cartella principale
+        cd ..
+    fi
+done
 
 
 echo -n "Caricamento: ["
@@ -38,7 +48,8 @@ echo "] Completato!"
 
 clear
 
-./EDS_GEN
+cd EDS_GEN
+make raw
 
 #If vuoi creare un file raw clicca 1
     # Se si allora creo file RAW
