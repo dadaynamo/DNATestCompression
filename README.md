@@ -22,3 +22,10 @@ Inoltre, assicurati di avere installato i seguenti strumenti:
 
    ```bash
    ./install.sh
+
+2. **Avvia l'applicativo** 
+
+   ```bash
+   ./DNATestCompression.sh
+
+- Segui le istruzioni fornite per eseguire il test
