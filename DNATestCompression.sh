@@ -21,6 +21,9 @@ if [[ $scelta -eq 1 ]]; then
     filename_selezionato = "${filename_selezionato}".txt
 
 else
+    if [[ $scelta -eq 5 ]]; then
+        exit 1
+    fi
     # Se l'utente ha scelto 0, mostra la lista dei file sample
     echo "Lista dei file sample:"
     ls samples/
