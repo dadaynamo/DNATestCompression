@@ -17,7 +17,7 @@ if [[ $scelta -eq 1 ]]; then
     echo "Creazione del file RAW..."
     read -p "Enter output name: " filename_selezionato
     read -p "Enter TOTsize: " TOTsize
-    ./mainEDS-GEN --type R --outputName "${filename_selezionato}" --totSize "${TOTsize}"
+    ./mainEDS-GEN --type R --outputName sample/"${filename_selezionato}" --totSize "${TOTsize}"
     filename_selezionato = "${filename_selezionato}".txt
 
 else
