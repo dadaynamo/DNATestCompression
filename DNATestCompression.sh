@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Vai nella directory EDS_GEN
-cd EDS_GEN || { echo "Impossibile accedere alla directory EDS_GEN"; exit 1; }
+cd EDS_GEN || { echo "Impossibile accedere alla directory EDS_GEN. \n Assicurati di aver prima eseguito ./install.sh"; exit 1; }
 
 echo "Opzioni:"
 echo "1 - Crea un nuovo file"
