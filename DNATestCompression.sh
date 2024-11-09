@@ -17,7 +17,7 @@ if [[ $scelta -eq 1 ]]; then
     echo "Creazione del file RAW..."
     read -p "Enter output name: " filename_selezionato
     read -p "Enter TOTsize: " TOTsize
-    ./mainEDS-GEN --type R --outputName sample/"${filename_selezionato}" --totSize "${TOTsize}"
+    ./mainEDS-GEN --type R --outputName ../sample/"${filename_selezionato}" --totSize "${TOTsize}"
     filename_selezionato = "${filename_selezionato}".txt
 
 else
@@ -26,7 +26,7 @@ else
     fi
     # Se l'utente ha scelto 0, mostra la lista dei file sample
     echo "Lista dei file sample:"
-    ls samples/
+    ls ../samples/
     read -p "Inserisci il nome del file da selezionare: " file_selezionato
       
     # Controlla se il file esiste nella cartella specificata
