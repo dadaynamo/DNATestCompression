@@ -17,20 +17,21 @@ if [[ $scelta -eq 1 ]]; then
     echo "Creazione del file RAW..."
     read -p "Enter output name: " filename_selezionato
     read -p "Enter TOTsize: " TOTsize
-    ./mainEDS-GEN --type R --outputName ../sample/"${filename_selezionato}" --totSize "${TOTsize}"
+    ./mainEDS-GEN --type R --outputName ../samples/"${filename_selezionato}" --totSize "${TOTsize}"
     filename_selezionato = "${filename_selezionato}".txt
 
 else
     if [[ $scelta -eq 5 ]]; then
         exit 1
     fi
+
     # Se l'utente ha scelto 0, mostra la lista dei file sample
     echo "Lista dei file sample:"
     ls ../samples/
     read -p "Inserisci il nome del file da selezionare: " file_selezionato
       
     # Controlla se il file esiste nella cartella specificata
-    if [[ -f "samples/$file_selezionato" ]]; then
+    if [[ -f "../samples/$file_selezionato" ]]; then
         echo "Il file $file_selezionato è stato selezionato correttamente"
     else
         echo "Il file $file_selezionato non esiste nella cartella $cartella. Riprova!!"
@@ -41,9 +42,10 @@ fi
 # Conferma il file creato o selezionato
 echo "File creato/selezionato: $file_selezionato"
 
+cd ..
 
 # Crea una directory per i file compressi nella cartella principale
-mkdir -p ../file_compressed
+mkdir -p file_compressed
 echo "Cartella 'file_compressed' creata nella directory principale."
 
 # Ulteriori opzioni per RAW o EDS
@@ -55,11 +57,12 @@ read -p "Inserisci 0 per RAW o 1 per EDS: " tipo_file
 if [[ $tipo_file -eq 0 ]]; then
     # Compressione del file RAW in vari formati
     echo "Compressione del file RAW in corso..."
-    gzip -c "$file_selezionato" > "../file_compressed/${file_selezionato}.gz"
-    bzip2 -c "$file_selezionato" > "../file_compressed/${file_selezionato}.bz2"
-    xz -c "$file_selezionato" > "../file_compressed/${file_selezionato}.xz"
+    gzip -c samples/"$file_selezionato" > "file_compressed/${file_selezionato}.gz"
+    bzip2 -c samples/"$file_selezionato" > "file_compressed/${file_selezionato}.bz2"
+    xz -c "samples/$file_selezionato" > "file_compressed/${file_selezionato}.xz"
     echo "file compressi correttamente"
 elif [[ $tipo_file -eq 1 ]]; then
+    echo "da implementare ancora"
     # Espansione e compressione del file EDS
    # echo "Espansione del file EDS in formato RAW..."
     # Esempio di comando per l'espansione (sostituire con il comando effettivo)
