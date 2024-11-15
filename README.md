@@ -14,7 +14,9 @@ Prima di eseguire lo script, assicurati di avere nella cartella corrente i segue
 Inoltre, assicurati di avere installato i seguenti strumenti:
 
 - **7-Zip**: Necessario per la compressione dei file.
-- **Bash**: Per eseguire lo script.
+   ```bash
+      sudo apt update && sudo apt upgrade
+      sudo apt install p7zip-full
 
 ## Utilizzo
 

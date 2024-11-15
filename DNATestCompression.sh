@@ -62,8 +62,23 @@ read -p "Inserisci 0 per RAW o 1 per EDS: " tipo_file
 if [[ $tipo_file -eq 0 ]]; then
     # Compressione del file RAW in vari formati
     echo "Compressione del file RAW in corso..."
-    gzip -c samples/"$file_selezionato" > "file_compressed/${file_selezionato}.gz"
-    bzip2 -c samples/"$file_selezionato" > "file_compressed/${file_selezionato}.bz2"
-    xz -c "samples/$file_selezionato" > "file_compressed/${file_selezionato}.xz"
-    echo "file compressi correttamente"
+    7z a -mx=5 -m0=PPMd "file_compressed/${filename_selezionato}_PPMd.7z" samples/"$filename_selezionato"
+    echo "***************************************************************************************************"
+    7z a -mx=5 -m0=LZMA "file_compressed/${filename_selezionato}_LZMA.7z" samples/"$filename_selezionato"
+    echo "***************************************************************************************************"
+    7z a -mx=5 -m0=LZMA2 "file_compressed/${filename_selezionato}_LZMA2.7z" samples/"$filename_selezionato" 
+    echo "***************************************************************************************************"
+    7z a -mx=5 -m0=BZip2 "file_compressed/${filename_selezionato}_BZip2.7z" samples/"$filename_selezionato"
+    echo "***************************************************************************************************"
+    7z a -mx=5 -m0=Deflate64 "file_compressed/${filename_selezionato}_Deflate64.7z" samples/"$filename_selezionato"
+    # Solo con p7zip "non ufficiale"
+    #echo "***************************************************************************************************"
+    #7z a -mx=5 -m0=LZ4 "file_compressed/${filename_selezionato}_LZ4.7z" samples/"$filename_selezionato"
+    echo "***************************************************************************************************"
+    echo "compressioni eseguite"
+
+    #gzip -c samples/"$filename_selezionato" > "file_compressed/${filename_selezionato}.gz"
+    #bzip2 -c samples/"$filename_selezionato" > "file_compressed/${filename_selezionato}.bz2"
+    #xz -c "samples/$filename_selezionato" > "file_compressed/${filename_selezionato}.xz"
+    #echo "file compressi correttamente"
 fi
