@@ -82,3 +82,5 @@ if [[ $tipo_file -eq 0 ]]; then
     #xz -c "samples/$filename_selezionato" > "file_compressed/${filename_selezionato}.xz"
     #echo "file compressi correttamente"
 fi
+
+#Da inserire la parte di compressione

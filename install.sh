@@ -38,6 +38,10 @@ for dir in */ ; do
     fi
 done
 
+# Compilazione edsToRaw
+cd EDS_GEN/edsToRaw
+make
+cd -
 
 echo -n "Caricamento: ["
 # Esegui un ciclo per simulare il progresso
