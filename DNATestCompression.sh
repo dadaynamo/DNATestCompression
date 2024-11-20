@@ -156,6 +156,7 @@ case $tipo_file in
         echo "Cartella 'file_compressed' creata nella directory principale."
 
 
+        #da controllare se il file compresso è quello selezionato
         if [[ $tipo_file -eq 1 ]]; then
             # Compressione del file RAW in vari formati
             echo "Compressione del file RAW in corso..."
