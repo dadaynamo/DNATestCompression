@@ -13,8 +13,9 @@ clear
 
 # Esegui azioni in base all'input
 case $tipo_file in
-    0)
-        # Lavoro con Raw DIRETTAMENTE
+    # Lavoro con Raw DIRETTAMENTE
+    0)  
+        
         echo -e "\e[32mOpzioni\e[0m"
         echo -e "\e[32m1\e[0m - Crea un nuovo file"
         echo -e "\e[32m0\e[0m - Scegli un file esistente"
@@ -91,12 +92,27 @@ case $tipo_file in
 
         #Da inserire la parte di compressione
         
+        #stampa della cartella sample e cartella file_compressed
+        echo -e "\e[32mCartella Sample\e[0m"
+        ls samples
+        echo -e "\e[32mCartella file_compressed\e[0m"
+        ls file_compressed
+        read -p "Inserisci il nome del filename Originale: " inOrigin
+        read -p "Inserisci la lista dei file name per il confronto: " inListComp
+        pwd
+        echo "${inOrigin}"
+        echo "${inListComp}"
+        
+        #./mainDNAStructureInfo --type C --typeOut T --typeIn E --profile A --outputName output --inOrigin input --inListComp test1 test2 test3
+
+        ./DNAStructureInfo/mainDNAStructureInfo --type C --typeOut C --profile A --outputName final --inOrigin samples/"${inOrigin}" --inListComp "${inListComp}"
 
         exit 0
         ;;
+
+    #Lavoro inizialmente con un file eds
     1)
-        #Lavoro inizialmente con un file eds
-    
+        
         echo -e "\e[32mOpzioni\e[0m"
         echo -e "\e[32m1\e[0m - Crea un nuovo file"
         echo -e "\e[32m0\e[0m - Scegli un file esistente"
@@ -186,6 +202,7 @@ case $tipo_file in
 
         exit 0
         ;;
+    #Errore inserimento scelta
     *)
         echo "Errore: Valore non valido."
         exit 1
