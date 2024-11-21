@@ -1,6 +1,7 @@
 #!/bin/bash
 
 mkdir -p samples/
+mkdir -p csv/
 # Script per clonare una lista fissa di repository Git
 
 # Lista repo da installare
