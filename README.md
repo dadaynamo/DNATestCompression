@@ -31,3 +31,9 @@ Inoltre, assicurati di avere installato i seguenti strumenti:
    ./DNATestCompression.sh
 
 - Segui le istruzioni fornite per eseguire il test
+
+### Opzionale
+1. **Disinstallazione**
+   ```bash
+   ./uninstall.sh
+
