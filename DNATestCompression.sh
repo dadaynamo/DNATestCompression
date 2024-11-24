@@ -105,7 +105,7 @@ case $tipo_file in
         
         #./mainDNAStructureInfo --type C --typeOut T --typeIn E --profile A --outputName output --inOrigin input --inListComp test1 test2 test3
 
-        ./DNAStructureInfo/mainDNAStructureInfo --type C --typeOut C --profile A --outputName final --inOrigin samples/"${inOrigin}" --inListComp "${inListComp}"
+        ./DNAStructureInfo/mainDNAStructureInfo --type C --typeOut C --profile A --outputName csv/final --inOrigin samples/"${inOrigin}" --inListComp "${inListComp}"
 
         exit 0
         ;;

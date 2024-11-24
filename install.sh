@@ -43,6 +43,9 @@ done
 cd EDS_GEN/edsToRaw
 make
 cd -
+cd EDS_GEN/stringCheck
+make
+cd -
 
 echo -n "Caricamento: ["
 # Esegui un ciclo per simulare il progresso
