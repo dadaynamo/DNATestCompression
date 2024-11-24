@@ -1,5 +1,146 @@
 #!/bin/bash
 
+#!/bin/bash
+
+# Funzione per mostrare il menu
+show_menu() {
+  echo "----------------------------------------"
+  echo -e "|\e[32mScegli un Opzione\e[0m                     |"
+  echo -e "|\e[32m1)\e[0m Generazione DNA in vari formati    |"
+  echo -e "|\e[32m2)\e[0m Controllo EDS creati               |"
+  echo -e "|\e[32m3)\e[0m EDS to RAW                         |"
+  echo -e "|\e[32m4)\e[0m BWT di file                        |"
+  echo -e "|\e[32m5)\e[0m Compressione file                  |"
+  echo -e "|\e[32m6)\e[0m Confronto tra file                 |"
+  echo -e "|\e[32m7)\e[0m Check delle cartelle               |"
+  echo -e "|\e[32m0)\e[0m Esci                               |"
+  echo "----------------------------------------"
+}
+
+# Funzione per eseguire il Programma 1
+run_program1() {
+    clear
+  echo "Hai scelto il Programma 1"
+  # Inserisci qui il comando per avviare il Programma 1, ad esempio:
+  # ./program1
+}
+
+# Funzione per eseguire il Programma 2
+run_program2() {
+    clear
+  echo "Hai scelto il Programma 2"
+  # Inserisci qui il comando per avviare il Programma 2, ad esempio:
+  # ./program2
+}
+
+# Funzione per eseguire il Programma 3
+run_program3() {
+    clear
+  echo "Hai scelto il Programma 3"
+  # Inserisci qui il comando per avviare il Programma 3, ad esempio:
+  # ./program3
+}
+# Funzione per eseguire il Programma 1
+run_program4() {
+    clear
+  echo "Hai scelto il Programma 4"
+  # Inserisci qui il comando per avviare il Programma 1, ad esempio:
+  # ./program1
+}
+
+# Funzione per eseguire il Programma 2
+run_program5() {
+    clear
+  echo "Hai scelto il Programma 5"
+  # Inserisci qui il comando per avviare il Programma 2, ad esempio:
+  # ./program2
+}
+
+# Funzione per eseguire il Programma 3
+run_program6() {
+    clear
+  echo "Hai scelto il Programma 6"
+  # Inserisci qui il comando per avviare il Programma 3, ad esempio:
+  # ./program3
+}
+# Funzione per eseguire il Programma 1
+run_program7() {
+    clear
+  echo "Hai scelto il Programma 7"
+  # Inserisci qui il comando per avviare il Programma 1, ad esempio:
+  # ./program1
+}
+
+
+# Controllo se i file sono stati installati
+# Elenco delle cartelle da controllare
+folders=("DNAStructureInfo" "EDS_GEN" "gsufsort" "EDS_GEN/edsToRaw" "EDS_GEN/stringCheck" )
+
+# Ciclo per verificare se ogni cartella esiste
+for folder in "${folders[@]}"; do
+  if [ ! -d "$folder" ]; then
+    echo "Errore: La cartella $folder non esiste. File mancanti"
+    exit 1  # Ferma il programma con codice di errore 1
+  fi
+done
+
+
+
+# Funzione principale
+while true; do
+  show_menu
+  read -p "Inserisci il numero dell'opzione: " choice
+
+  case $choice in
+    1)
+      run_program1
+      ;;
+    2)
+      run_program2
+      ;;
+    3)
+      run_program3
+      ;;
+    4)
+      run_program4
+      ;;
+    5)
+      run_program5
+      ;;
+    6)
+      run_program6
+      ;;
+    7)
+      run_program7
+      ;;
+    0)
+        clear
+      echo "Uscita..."
+      exit 0
+      ;;
+    *)
+      echo "Scelta non valida. Per favore inserisci un numero tra 0 e 7."
+      ;;
+  esac
+done
+
+
+
+
+
+
+
+
+
+
+
+
+# ************************************************************************************************************************************
+# ************************************************************************************************************************************
+# ******************************************* VECCHIA VERSIONE ***********************************************************************
+# ************************************************************************************************************************************
+# ************************************************************************************************************************************
+
 # Vai nella directory EDS_GEN
 cd EDS_GEN || { echo "Impossibile accedere alla directory EDS_GEN. Assicurati di aver prima eseguito ./install.sh"; exit 1; }
 
