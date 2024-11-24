@@ -13,6 +13,7 @@ show_menu() {
   echo -e "|\e[32m5)\e[0m Compressione file                  |"
   echo -e "|\e[32m6)\e[0m Confronto tra file                 |"
   echo -e "|\e[32m7)\e[0m Check delle cartelle               |"
+  echo -e "|\e[32m8)\e[0m Mostra contenuto file              |"
   echo -e "|\e[32m0)\e[0m Esci                               |"
   echo "----------------------------------------"
 }
@@ -20,17 +21,91 @@ show_menu() {
 # Funzione per eseguire il Programma 1
 run_program1() {
     clear
-  echo "Hai scelto il Programma 1"
-  # Inserisci qui il comando per avviare il Programma 1, ad esempio:
-  # ./program1
+
+    # Vai nella directory EDS_GEN
+    cd EDS_GEN || { echo "Impossibile accedere alla directory EDS_GEN. Assicurati di aver prima eseguito ./install.sh"; exit 1; }
+
+    # Ulteriori opzioni per RAW o EDS
+    echo "Genera un file RAW, premi 0."
+    echo "Genera un file EDS, premi 1."
+
+
+    read -p "-> " tipo_file
+    clear
+
+    # Esegui azioni in base all'input
+    case $tipo_file in
+        # Genera un Raw DIRETTAMENTE
+        0)  
+            # Se l'utente ha scelto 1, crea un nuovo file RAW
+
+            echo "Creazione del file RAW..."
+            read -p "Enter output name: " filename_selezionato
+            read -p "Enter TOTsize: " TOTsize
+            ./mainEDS-GEN --type R --outputName ../samples/"${filename_selezionato}" --totSize "${TOTsize}"
+            filename_selezionato="${filename_selezionato}.txt"
+
+            # Conferma il file creato o selezionato
+            echo "File creato/selezionato: $filename_selezionato"
+            cd ..
+            pwd  
+    
+            ;;
+
+        #Lavoro inizialmente con un file eds
+        1)
+                echo "Creazione del file EDS..."
+                read -p "Enter output name: " filename_selezionato
+                read -p "Enter TOTsize: " TOTsize
+                read -p "Enter maxPerDeg: " maxPerDeg
+                read -p "Enter numDeg: " numDeg
+                
+                ./mainEDS-GEN --type E --outputName ../samples/"${filename_selezionato}" --totSize "${TOTsize}" --maxPerDeg "${maxPerDeg}" --numDeg "${numDeg}"
+                filename_selezionato="${filename_selezionato}.eds"
+            
+            # Conferma il file creato o selezionato
+            echo "File creato/selezionato: $filename_selezionato"
+            cd ..
+            pwd
+
+            ;;
+        #Errore inserimento scelta
+        *)
+            echo "Errore: Valore non valido."
+            exit 1
+            ;;
+    esac    
+
+
 }
 
 # Funzione per eseguire il Programma 2
 run_program2() {
     clear
-  echo "Hai scelto il Programma 2"
-  # Inserisci qui il comando per avviare il Programma 2, ad esempio:
-  # ./program2
+
+    #stampa degli eds in sample
+    pwd 
+    echo "Scegli un EDS tra i disponibili: "
+    #stampa lista filename
+    echo "--------------------------------"
+    echo "Dir /samples:"
+    for file in samples/*.eds; do
+        echo "$(basename "$file")"
+    done
+    echo "--------------------------------"
+    read -p "-> " file_name
+
+    # Controlla se il file esiste
+    if [ -f "samples/$file_name" ]; then
+    cd EDS_GEN/stringCheck || { echo "Impossibile accedere alla directory EDS_GEN/stringCheck. Assicurati di aver prima eseguito ./install.sh"; exit 1; }
+    cd -
+    ./EDS_GEN/stringCheck/stringCheck "samples/$file_name" "samples/output_stringCheck"
+    else
+    echo "Errore: Il file $file_name non esiste. Riprova..."
+
+    fi
+
+
 }
 
 # Funzione per eseguire il Programma 3
@@ -66,11 +141,58 @@ run_program6() {
 # Funzione per eseguire il Programma 1
 run_program7() {
     clear
-  echo "Hai scelto il Programma 7"
-  # Inserisci qui il comando per avviare il Programma 1, ad esempio:
-  # ./program1
+    folder=$1  # Prende il nome della cartella come argomento
+    echo $folder
+
+    # Verifica se la cartella esiste
+    if [ -d "$folder" ]; then
+    echo "Contenuto della cartella $folder:"
+    ls "$folder"  # Stampa il contenuto della cartella
+    else
+    echo "Errore: La cartella $folder non esiste."
+    fi
 }
 
+# Funzione per eseguire il Programma 2
+run_program8() {
+    clear
+    cd samples/
+    echo "Lista file in samples/"
+    ls .
+    # Chiedi all'utente di inserire il nome del file
+    echo "Inserisci il nome del file che vuoi aprire:"
+    read file_name
+  
+  # Verifica se il file esiste
+  if [ ! -f "$file_name" ]; then
+    echo "Errore: Il file '$file_name' non esiste."
+    return 1  # Termina la funzione con un errore
+  fi
+
+  # Mostra il primo messaggio di attenzione
+  echo "Attenzione: Stai per aprire il file '$file_name'. Questo potrebbe essere un file di grandi dimensioni."
+  
+  # Chiedi conferma per aprire il file
+  read -p "Sei sicuro di volerlo aprire? (s/n): " confirm
+  if [[ "$confirm" != "s" && "$confirm" != "S" ]]; then
+    echo "Operazione annullata."
+    
+  fi
+  
+  # Controlla se il file è grande (supera 1MB come esempio)
+  file_size=$(stat -c %s "$file_name")
+  if [ "$file_size" -gt 1048576 ]; then
+    echo "Attenzione: Il file è grande. Sei sicuro di volerlo visualizzare?"
+    read -p "Sei sicuro? (s/n): " confirm_size
+    if [[ "$confirm_size" != "s" && "$confirm_size" != "S" ]]; then
+      echo "Operazione annullata."
+      
+    fi
+  fi
+  
+  # Se tutto è confermato, usa cat per visualizzare il file
+  cat "$file_name"
+}
 
 # Controllo se i file sono stati installati
 # Elenco delle cartelle da controllare
@@ -111,7 +233,19 @@ while true; do
       run_program6
       ;;
     7)
-      run_program7
+        pwd
+        # Chiedi all'utente di inserire il nome della cartella
+        echo "Inserisci il nome della cartella che vuoi visualizzare: {"samples", "file_compressed", "csv"}"
+        read folder_name
+
+        # Chiamata alla funzione con il nome della cartella inserita
+        run_program7 "$folder_name"    
+        
+      ;;
+    8)
+        clear
+        run_program8
+      exit 0
       ;;
     0)
         clear
