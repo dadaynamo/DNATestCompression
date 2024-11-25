@@ -8,12 +8,12 @@ show_menu() {
   echo -e "| \e[32mScegli un Opzione\e[0m                    |"
   echo -e "| \e[32m1)\e[0m Generazione DNA in vari formati   |" // OK
   echo -e "| \e[32m2)\e[0m Controllo EDS creati              |" // OK ma da controllare perche esce un output strano
-  echo -e "| \e[32m3)\e[0m EDS to RAW                        |" 
+  echo -e "| \e[32m3)\e[0m EDS to RAW                        |" //
   echo -e "| \e[32m4)\e[0m BWT di file                       |" // OK
   echo -e "| \e[32m5)\e[0m Compressione file                 |" // OK
   echo -e "| \e[32m6)\e[0m Confronto tra file                |"
   echo -e "| \e[32m7)\e[0m Check delle cartelle              |" // OK
-  echo -e "| \e[32m8)\e[0m Mostra contenuto file             |" // OK
+  echo -e "| \e[32m8)\e[0m Mostra contenuto file             |" // OK Ricontrollare
   echo -e "| \e[32m0)\e[0m Esci                              |"
   echo "----------------------------------------"
 }
@@ -110,10 +110,27 @@ run_program2() {
 
 # Funzione per eseguire il Programma 3
 run_program3() {
-    clear
-  echo "Hai scelto il Programma 3"
-  # Inserisci qui il comando per avviare il Programma 3, ad esempio:
-  # ./program3
+  clear
+  pwd
+  #controlla che ci sia edtoraw compilato
+  # Controlla se il file esiste
+    if [ -d "EDS_GEN/edsToRaw" ]; then
+      #stampa lista filename
+      echo "--------------------------------"
+      echo "Dir /samples:"
+      for file in samples/*.eds; do
+          echo "$(basename "$file")"
+      done
+      echo "--------------------------------"
+
+
+    else
+      echo "Errore: La directory in questione non esiste o non è accessbile. Riprova con ./install.sh"
+    fi
+
+  #inserisci sia input che samples/output
+  
+  
 }
 # Funzione per eseguire il Programma 1
 run_program4() {
