@@ -9,8 +9,8 @@ show_menu() {
   echo -e "| \e[32m1)\e[0m Generazione DNA in vari formati   |" // OK
   echo -e "| \e[32m2)\e[0m Controllo EDS creati              |" // OK ma da controllare perche esce un output strano
   echo -e "| \e[32m3)\e[0m EDS to RAW                        |" 
-  echo -e "| \e[32m4)\e[0m BWT di file                       |"
-  echo -e "| \e[32m5)\e[0m Compressione file                 |" //OK
+  echo -e "| \e[32m4)\e[0m BWT di file                       |" // OK
+  echo -e "| \e[32m5)\e[0m Compressione file                 |" // OK
   echo -e "| \e[32m6)\e[0m Confronto tra file                |"
   echo -e "| \e[32m7)\e[0m Check delle cartelle              |" // OK
   echo -e "| \e[32m8)\e[0m Mostra contenuto file             |" // OK
@@ -117,10 +117,24 @@ run_program3() {
 }
 # Funzione per eseguire il Programma 1
 run_program4() {
-    clear
-  echo "Hai scelto il Programma 4"
-  # Inserisci qui il comando per avviare il Programma 1, ad esempio:
-  # ./program1
+  clear
+  # Mostra la lista dei file sample
+  echo "Lista dei file in samples:"
+  ls -al samples/
+  read -p "Inserisci il nome del file da selezionare: " filename_selezionato
+  if [ -f "samples/$filename_selezionato" ]; then
+    echo "-------------------------------------"
+    echo "Avvio BWT di ${filename_selezionato}"
+    echo "-------------------------------------"
+    pwd
+    ./gsufsort/gsufsort "samples/${filename_selezionato}" --txt --bwt --time --output "samples/${filename_selezionato}_bwt"
+
+    echo "Completato. Puoi ora controllare in samples/ l'output"
+  
+  else
+    echo "Il file selezionato non esiste"
+  fi
+
 }
 
 # Funzione per eseguire il Programma 2
