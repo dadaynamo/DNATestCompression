@@ -5,16 +5,16 @@
 # Funzione per mostrare il menu
 show_menu() {
   echo "----------------------------------------"
-  echo -e "|\e[32mScegli un Opzione\e[0m                     |"
-  echo -e "|\e[32m1)\e[0m Generazione DNA in vari formati    |"
-  echo -e "|\e[32m2)\e[0m Controllo EDS creati               |"
-  echo -e "|\e[32m3)\e[0m EDS to RAW                         |"
-  echo -e "|\e[32m4)\e[0m BWT di file                        |"
-  echo -e "|\e[32m5)\e[0m Compressione file                  |"
-  echo -e "|\e[32m6)\e[0m Confronto tra file                 |"
-  echo -e "|\e[32m7)\e[0m Check delle cartelle               |"
-  echo -e "|\e[32m8)\e[0m Mostra contenuto file              |"
-  echo -e "|\e[32m0)\e[0m Esci                               |"
+  echo -e "| \e[32mScegli un Opzione\e[0m                    |"
+  echo -e "| \e[32m1)\e[0m Generazione DNA in vari formati   |" // OK
+  echo -e "| \e[32m2)\e[0m Controllo EDS creati              |" // OK ma da controllare perche esce un output strano
+  echo -e "| \e[32m3)\e[0m EDS to RAW                        |" 
+  echo -e "| \e[32m4)\e[0m BWT di file                       |"
+  echo -e "| \e[32m5)\e[0m Compressione file                 |" //OK
+  echo -e "| \e[32m6)\e[0m Confronto tra file                |"
+  echo -e "| \e[32m7)\e[0m Check delle cartelle              |" // OK
+  echo -e "| \e[32m8)\e[0m Mostra contenuto file             |" // OK
+  echo -e "| \e[32m0)\e[0m Esci                              |"
   echo "----------------------------------------"
 }
 
@@ -125,10 +125,47 @@ run_program4() {
 
 # Funzione per eseguire il Programma 2
 run_program5() {
-    clear
-  echo "Hai scelto il Programma 5"
-  # Inserisci qui il comando per avviare il Programma 2, ad esempio:
-  # ./program2
+  clear
+  # Verifica se la cartella esiste
+  if [ -d "file_compressed" ]; then
+    # Mostra la lista dei file sample
+    echo "Lista dei file in samples:"
+    ls samples/
+    read -p "Inserisci il nome del file da selezionare: " filename_selezionato
+    
+    # Controlla se il file esiste nella cartella specificata
+    if [[ -f "samples/$filename_selezionato" ]]; then
+        echo "Il file $filename_selezionato è stato selezionato correttamente"
+        
+        # Compressione del file RAW in vari formati
+        echo "Compressione del file RAW in corso..."
+        7z a -mx=5 -m0=PPMd "file_compressed/${filename_selezionato}_PPMd.7z" samples/"$filename_selezionato"
+        echo "*******************************************************************************************************************************"
+        7z a -mx=5 -m0=LZMA "file_compressed/${filename_selezionato}_LZMA.7z" samples/"$filename_selezionato"
+        echo "*******************************************************************************************************************************"
+        7z a -mx=5 -m0=LZMA2 "file_compressed/${filename_selezionato}_LZMA2.7z" samples/"$filename_selezionato" 
+        echo "*******************************************************************************************************************************"
+        7z a -mx=5 -m0=BZip2 "file_compressed/${filename_selezionato}_BZip2.7z" samples/"$filename_selezionato"
+        echo "*******************************************************************************************************************************"
+        7z a -mx=5 -m0=Deflate64 "file_compressed/${filename_selezionato}_Deflate64.7z" samples/"$filename_selezionato"
+        # Solo con p7zip "non ufficiale"
+        #echo "***************************************************************************************************"
+        #7z a -mx=5 -m0=LZ4 "file_compressed/${filename_selezionato}_LZ4.7z" samples/"$filename_selezionato"
+        echo "*******************************************************************************************************************************"
+        echo "compressioni eseguite"
+
+        #gzip -c samples/"$filename_selezionato" > "file_compressed/${filename_selezionato}.gz"
+        #bzip2 -c samples/"$filename_selezionato" > "file_compressed/${filename_selezionato}.bz2"
+        #xz -c "samples/$filename_selezionato" > "file_compressed/${filename_selezionato}.xz"
+        #echo "file compressi correttamente"
+    else
+        echo "Il file $filename_selezionato non esiste nella cartella $cartella. Riprova!!"
+        exit 1
+    fi
+  
+  else
+      echo "Riavviare il programma con ./install.h"
+  fi
 }
 
 # Funzione per eseguire il Programma 3
@@ -147,21 +184,20 @@ run_program7() {
     # Verifica se la cartella esiste
     if [ -d "$folder" ]; then
     echo "Contenuto della cartella $folder:"
-    ls "$folder"  # Stampa il contenuto della cartella
+    ls -al "$folder"  # Stampa il contenuto della cartella
     else
     echo "Errore: La cartella $folder non esiste."
     fi
 }
 
-# Funzione per eseguire il Programma 2
-run_program8() {
-    clear
-    cd samples/
-    echo "Lista file in samples/"
-    ls .
-    # Chiedi all'utente di inserire il nome del file
-    echo "Inserisci il nome del file che vuoi aprire:"
-    read file_name
+run_program8() { # Stampa contenuto file in samples
+  clear
+  cd samples/
+  echo "Lista file in samples/"
+  ls .
+  # Chiedi all'utente di inserire il nome del file
+  echo "Inserisci il nome del file che vuoi aprire:"
+  read file_name
   
   # Verifica se il file esiste
   if [ ! -f "$file_name" ]; then
@@ -169,29 +205,24 @@ run_program8() {
     return 1  # Termina la funzione con un errore
   fi
 
+  file_size=$(stat -c %s "$file_name")
+
   # Mostra il primo messaggio di attenzione
-  echo "Attenzione: Stai per aprire il file '$file_name'. Questo potrebbe essere un file di grandi dimensioni."
-  
+  echo "Attenzione: Il file è grande ${file_size} byte. Sei sicuro di volerlo visualizzare?"
+
   # Chiedi conferma per aprire il file
   read -p "Sei sicuro di volerlo aprire? (s/n): " confirm
-  if [[ "$confirm" != "s" && "$confirm" != "S" ]]; then
-    echo "Operazione annullata."
-    
+  if [[ "$confirm" = "s" || "$confirm" = "S" ]]; then
+
+        cat "$file_name" 
+        echo ""
+  else
+        echo "Operazione annullata."
   fi
+  cd -
   
-  # Controlla se il file è grande (supera 1MB come esempio)
-  file_size=$(stat -c %s "$file_name")
-  if [ "$file_size" -gt 1048576 ]; then
-    echo "Attenzione: Il file è grande. Sei sicuro di volerlo visualizzare?"
-    read -p "Sei sicuro? (s/n): " confirm_size
-    if [[ "$confirm_size" != "s" && "$confirm_size" != "S" ]]; then
-      echo "Operazione annullata."
-      
-    fi
-  fi
-  
-  # Se tutto è confermato, usa cat per visualizzare il file
-  cat "$file_name"
+
+
 }
 
 # Controllo se i file sono stati installati
@@ -245,7 +276,7 @@ while true; do
     8)
         clear
         run_program8
-      exit 0
+
       ;;
     0)
         clear
