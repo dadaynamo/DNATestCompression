@@ -265,9 +265,10 @@ run_program6() {
   echo "File dalla cartella samples: ${outputsample}"
   echo "File dalla cartella file_compressed: ${outputcompressed}"
   echo "Stringa concatenata: ${finalInputList}"
-
+  
   # Esegui il comando finale
   ./DNAStructureInfo/mainDNAStructureInfo --type C --typeOut C --profile A --outputName csv/final --inOrigin samples/"${inOrigin}" --inListComp "${finalInputList}"
+  pwd
 }
 
 
@@ -364,6 +365,7 @@ run_program9() {
 
   #Apertura file csv in terminale
   cat "$file_name" | column -s, -t
+  cd -
 }
 
 ## START -------------------------------------------------------------------------------------------------------------
