@@ -2,6 +2,7 @@
 
 mkdir -p samples/
 mkdir -p csv/
+mkdir -p file_compressed/
 # Script per clonare una lista fissa di repository Git
 
 # Lista repo da installare

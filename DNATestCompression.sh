@@ -11,7 +11,7 @@ show_menu() {
   echo -e "| \e[32m3)\e[0m EDS to RAW                        |" // OK
   echo -e "| \e[32m4)\e[0m BWT di file                       |" // OK
   echo -e "| \e[32m5)\e[0m Compressione file                 |" // OK
-  echo -e "| \e[32m6)\e[0m Confronto tra file                |"
+  echo -e "| \e[32m6)\e[0m Confronto tra file                |" // Da fare il confronto tra file
   echo -e "| \e[32m7)\e[0m Check delle cartelle              |" // OK
   echo -e "| \e[32m8)\e[0m Mostra contenuto file             |" // OK
   echo -e "| \e[32m0)\e[0m Esci                              |"
@@ -202,10 +202,29 @@ run_program5() {
 
 # Funzione per eseguire il Programma 3
 run_program6() {
-    clear
-  echo "Hai scelto il Programma 6"
-  # Inserisci qui il comando per avviare il Programma 3, ad esempio:
-  # ./program3
+  clear
+  #stampa della cartella sample e cartella file_compressed
+  echo -e "\e[32mCartella Samples\e[0m"
+  ls samples
+  echo -e "\e[32mCartella file_compressed\e[0m"
+  if [ -d file_compressed ]; then
+    if [ -z "$(ls -A file_compressed)" ]; then
+      echo "-"
+    else
+      ls file_compressed
+    fi
+  else
+    echo "La directory 'files_compressed' non esiste. Chiudere il programma e rieseguire ./install.sh"
+    exit 1
+  fi
+  read -p "Inserisci il nome del filename Originale: " inOrigin
+  read -p "Inserisci la lista dei file name per il confronto: " inListComp
+  pwd
+  echo "${inOrigin}"
+  echo "${inListComp}"
+  
+  ./DNAStructureInfo/mainDNAStructureInfo --type C --typeOut C --profile A --outputName csv/final --inOrigin samples/"${inOrigin}" --inListComp "${inListComp}"
+
 }
 # Funzione per eseguire il Programma 1
 run_program7() {
