@@ -13,7 +13,7 @@ show_menu() {
   echo -e "| \e[32m5)\e[0m Compressione file                 |" // OK
   echo -e "| \e[32m6)\e[0m Confronto tra file                |"
   echo -e "| \e[32m7)\e[0m Check delle cartelle              |" // OK
-  echo -e "| \e[32m8)\e[0m Mostra contenuto file             |" // OK Ricontrollare
+  echo -e "| \e[32m8)\e[0m Mostra contenuto file             |" // OK
   echo -e "| \e[32m0)\e[0m Esci                              |"
   echo "----------------------------------------"
 }
@@ -221,41 +221,62 @@ run_program7() {
     echo "Errore: La cartella $folder non esiste."
     fi
 }
-
-run_program8() { # Stampa contenuto file in samples
+run_program8() {
   clear
-  cd samples/
+  cd samples/ || { echo "Errore: impossibile accedere alla directory samples/"; return 1; }
   echo "Lista file in samples/"
   ls .
-  # Chiedi all'utente di inserire il nome del file
-  echo "Inserisci il nome del file che vuoi aprire:"
-  read file_name
+  
+  echo "Inserisci il nome del file che vuoi aprire (o digita 'exit' per uscire):"
+  read -r file_name
+  
+  # Verifica se l'utente vuole uscire
+  if [[ "$file_name" == "exit" ]]; then
+    echo "Operazione annullata."
+    cd -
+    return 0
+  fi
   
   # Verifica se il file esiste
-  if [ ! -f "$file_name" ]; then
+  if [[ ! -f "$file_name" ]]; then
     echo "Errore: Il file '$file_name' non esiste."
-    return 1  # Termina la funzione con un errore
+    cd -
+    return 1
   fi
 
-  file_size=$(stat -c %s "$file_name")
-
-  # Mostra il primo messaggio di attenzione
-  echo "Attenzione: Il file è grande ${file_size} byte. Sei sicuro di volerlo visualizzare?"
-
-  # Chiedi conferma per aprire il file
-  read -p "Sei sicuro di volerlo aprire? (s/n): " confirm
-  if [[ "$confirm" = "s" || "$confirm" = "S" ]]; then
-
-        cat "$file_name" 
-        echo ""
+  # Ottieni la dimensione del file
+  if file_size=$(stat -c %s "$file_name" 2>/dev/null); then
+    echo "Attenzione: Il file è grande ${file_size} byte."
   else
-        echo "Operazione annullata."
+    echo "Errore: impossibile ottenere la dimensione del file."
+    cd -
+    return 1
   fi
-  cd -
+
+  # Ciclo per confermare l'apertura del file
+  while true; do
+    read -rp "Sei sicuro di volerlo aprire? (s/n): " confirm
+    case "$confirm" in
+      [sS])
+        cat "$file_name"
+        echo ""
+        break
+        ;;
+      [nN])
+        echo "Operazione annullata. Il file non è stato aperto."
+        break
+        ;;
+      *)
+        echo "Input non valido. Inserisci 's' per sì o 'n' per no."
+        ;;
+    esac
+  done
   
-
-
+  # Torna alla directory precedente
+  cd -
 }
+
+## START -------------------------------------------------------------------------------------------------------------
 
 # Controllo se i file sono stati installati
 # Elenco delle cartelle da controllare
@@ -547,5 +568,43 @@ case $tipo_file in
         ;;
 esac    
 
+
+
+##############################################################
+
+run_program8() { # Stampa contenuto file in samples
+  clear
+  cd samples/
+  echo "Lista file in samples/"
+  ls .
+  # Chiedi all'utente di inserire il nome del file
+  echo "Inserisci il nome del file che vuoi aprire:"
+  read file_name
+  
+  # Verifica se il file esiste
+  if [ ! -f "$file_name" ]; then
+    echo "Errore: Il file '$file_name' non esiste."
+    return 1  # Termina la funzione con un errore
+  fi
+
+  file_size=$(stat -c %s "$file_name")
+
+  # Mostra il primo messaggio di attenzione
+  echo "Attenzione: Il file è grande ${file_size} byte. Sei sicuro di volerlo visualizzare?"
+
+  # Chiedi conferma per aprire il file
+  read -p "Sei sicuro di volerlo aprire? (s/n): " confirm
+  if [[ "$confirm" = "s" || "$confirm" = "S" ]]; then
+
+        cat "$file_name" 
+        echo ""
+  else
+        echo "Operazione annullata."
+  fi
+  cd -
+  
+
+
+}
 
 
