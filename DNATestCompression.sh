@@ -204,7 +204,7 @@ run_program5() {
 # Funzione per eseguire il Programma 3
 run_program6() {
   clear
-  #stampa della cartella sample e cartella file_compressed
+  # Stampa della cartella samples e file_compressed
   echo -e "\e[32mCartella Samples\e[0m"
   ls samples
   echo -e "\e[32mCartella file_compressed\e[0m"
@@ -215,47 +215,62 @@ run_program6() {
       ls file_compressed
     fi
   else
-    echo "La directory 'files_compressed' non esiste. Chiudere il programma e rieseguire ./install.sh"
+    echo "La directory 'file_compressed' non esiste. Chiudere il programma e rieseguire ./install.sh"
     exit 1
   fi
+
+  # Input del file originale
   read -p "Inserisci il nome del filename Originale: " inOrigin
-  read -p "Inserisci la lista dei file name dalla cartella samples da confrontare: " inListCompSample
+
+  # Input per i file da samples
+  read -p "Inserisci la lista dei file name dalla cartella samples da confrontare (premi Invio per lasciare vuoto): " inListCompSample
   pwd
 
-  # Stringa modificata
+  # Creazione della stringa modificata per samples
   outputsample=""
+  if [ -n "$inListCompSample" ]; then
+    for word in $inListCompSample; do
+      outputsample+="samples/$word "  # Aggiungi "samples/" davanti a ogni parola
+    done
+    outputsample=$(echo "$outputsample" | sed 's/ $//') # Rimuovi spazio finale
+  fi
 
-  # Itera su ogni parola nella stringa
-  for word in $inListCompSample; do
-    outputsample+="samples/$word "  # Aggiungi "samples/" davanti a ogni parola
-  done
-
-  # Rimuovi l'ultimo spazio in eccesso
-  outputsample=$(echo $outputsample | sed 's/ $//')
-
-
-  read -p "Inserisci la lista dei file name dalla cartella file_compressed da confrontare: " inListCompfile_compressed
+  # Input per i file da file_compressed
+  read -p "Inserisci la lista dei file name dalla cartella file_compressed da confrontare (premi Invio per lasciare vuoto): " inListCompfile_compressed
   pwd
 
-  # Stringa modificata
+  # Creazione della stringa modificata per file_compressed
   outputcompressed=""
+  if [ -n "$inListCompfile_compressed" ]; then
+    for word in $inListCompfile_compressed; do
+      outputcompressed+="file_compressed/$word "  # Aggiungi "file_compressed/" davanti a ogni parola
+    done
+    outputcompressed=$(echo "$outputcompressed" | sed 's/ $//') # Rimuovi spazio finale
+  fi
 
-  # Itera su ogni parola nella stringa
-  for word in $inListCompfile_compressed; do
-    outputcompressed+="file_compressed/$word "  # Aggiungi "samples/" davanti a ogni parola
-  done
+  # Costruisci la stringa finale
+  finalInputList=""
+  if [ -n "$outputsample" ]; then
+    finalInputList+="$outputsample"
+  fi
+  if [ -n "$outputcompressed" ]; then
+    if [ -n "$finalInputList" ]; then
+      finalInputList+=" "  # Aggiungi spazio solo se necessario
+    fi
+    finalInputList+="$outputcompressed"
+  fi
 
-  # Rimuovi l'ultimo spazio in eccesso
-  outputcompressed=$(echo $outputcompressed | sed 's/ $//')
+  # Mostra i risultati
+  echo "Input originale: ${inOrigin}"
+  echo "File dalla cartella samples: ${outputsample}"
+  echo "File dalla cartella file_compressed: ${outputcompressed}"
+  echo "Stringa concatenata: ${finalInputList}"
 
-
-  echo "${inOrigin}"
-  echo "${outputsample}"
-  echo "${outputcompressed}"
-  echo "${outputsample} ${outputcompressed}"
-  ./DNAStructureInfo/mainDNAStructureInfo --type C --typeOut C --profile A --outputName csv/final --inOrigin samples/"${inOrigin}" --inListComp "${outputsample} ${outputcompressed}"
-
+  # Esegui il comando finale
+  ./DNAStructureInfo/mainDNAStructureInfo --type C --typeOut C --profile A --outputName csv/final --inOrigin samples/"${inOrigin}" --inListComp "${finalInputList}"
 }
+
+
 # Funzione per eseguire il Programma 1
 run_program7() {
     clear
