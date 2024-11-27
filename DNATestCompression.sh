@@ -219,12 +219,41 @@ run_program6() {
     exit 1
   fi
   read -p "Inserisci il nome del filename Originale: " inOrigin
-  read -p "Inserisci la lista dei file name per il confronto: " inListComp
+  read -p "Inserisci la lista dei file name dalla cartella samples da confrontare: " inListCompSample
   pwd
+
+  # Stringa modificata
+  outputsample=""
+
+  # Itera su ogni parola nella stringa
+  for word in $inListCompSample; do
+    outputsample+="samples/$word "  # Aggiungi "samples/" davanti a ogni parola
+  done
+
+  # Rimuovi l'ultimo spazio in eccesso
+  outputsample=$(echo $outputsample | sed 's/ $//')
+
+
+  read -p "Inserisci la lista dei file name dalla cartella file_compressed da confrontare: " inListCompfile_compressed
+  pwd
+
+  # Stringa modificata
+  outputcompressed=""
+
+  # Itera su ogni parola nella stringa
+  for word in $inListCompfile_compressed; do
+    outputcompressed+="file_compressed/$word "  # Aggiungi "samples/" davanti a ogni parola
+  done
+
+  # Rimuovi l'ultimo spazio in eccesso
+  outputcompressed=$(echo $outputcompressed | sed 's/ $//')
+
+
   echo "${inOrigin}"
-  echo "${inListComp}"
-  
-  ./DNAStructureInfo/mainDNAStructureInfo --type C --typeOut C --profile A --outputName csv/final --inOrigin samples/"${inOrigin}" --inListComp "${inListComp}"
+  echo "${outputsample}"
+  echo "${outputcompressed}"
+  echo "${outputsample} ${outputcompressed}"
+  ./DNAStructureInfo/mainDNAStructureInfo --type C --typeOut C --profile A --outputName csv/final --inOrigin samples/"${inOrigin}" --inListComp "${outputsample} ${outputcompressed}"
 
 }
 # Funzione per eseguire il Programma 1
