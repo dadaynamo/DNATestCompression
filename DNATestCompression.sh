@@ -8,7 +8,7 @@ show_menu() {
   echo -e "| \e[32mScegli un Opzione\e[0m                    |"
   echo -e "| \e[32m1)\e[0m Generazione DNA in vari formati   |" // OK
   echo -e "| \e[32m2)\e[0m Controllo EDS creati              |" // OK ma da controllare perche esce un output strano
-  echo -e "| \e[32m3)\e[0m EDS to RAW                        |" //
+  echo -e "| \e[32m3)\e[0m EDS to RAW                        |" // OK
   echo -e "| \e[32m4)\e[0m BWT di file                       |" // OK
   echo -e "| \e[32m5)\e[0m Compressione file                 |" // OK
   echo -e "| \e[32m6)\e[0m Confronto tra file                |"
@@ -122,7 +122,8 @@ run_program3() {
           echo "$(basename "$file")"
       done
       echo "--------------------------------"
-
+      read -p "Inserisci il nome del file da selezionare: " filename_selezionato
+      ./EDS_GEN/edsToRaw/edsToRaw "samples/$filename_selezionato" "samples/${filename_selezionato}_ext.txt"
 
     else
       echo "Errore: La directory in questione non esiste o non è accessbile. Riprova con ./install.sh"
