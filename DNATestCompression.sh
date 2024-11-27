@@ -14,6 +14,7 @@ show_menu() {
   echo -e "| \e[32m6)\e[0m Confronto tra file                |" // Da fare il confronto tra file
   echo -e "| \e[32m7)\e[0m Check delle cartelle              |" // OK
   echo -e "| \e[32m8)\e[0m Mostra contenuto file             |" // OK
+  echo -e "| \e[32m9)\e[0m Stampa CSV                        |" // OK 
   echo -e "| \e[32m0)\e[0m Esci                              |"
   echo "----------------------------------------"
 }
@@ -294,6 +295,32 @@ run_program8() {
   # Torna alla directory precedente
   cd -
 }
+run_program9() {
+  clear
+  cd csv/ || { echo "Errore: impossibile accedere alla directory samples/"; return 1; }
+  echo "Lista file in csv/"
+  ls .
+  
+  echo "Inserisci il nome del file che vuoi aprire (o digita 'exit' per uscire):"
+  read -r file_name
+  
+  # Verifica se l'utente vuole uscire
+  if [[ "$file_name" == "exit" ]]; then
+    echo "Operazione annullata."
+    cd -
+    return 0
+  fi
+  
+  # Verifica se il file esiste
+  if [[ ! -f "$file_name" ]]; then
+    echo "Errore: Il file '$file_name' non esiste."
+    cd -
+    return 1
+  fi
+
+  #Apertura file csv in terminale
+  cat "$file_name" | column -s, -t
+}
 
 ## START -------------------------------------------------------------------------------------------------------------
 
@@ -348,6 +375,11 @@ while true; do
     8)
         clear
         run_program8
+
+      ;;
+    9)
+        clear
+        run_program9
 
       ;;
     0)
