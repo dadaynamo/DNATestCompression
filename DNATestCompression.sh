@@ -124,8 +124,8 @@ run_program3() {
       done
       echo "--------------------------------"
       read -p "Inserisci il nome del file da selezionare: " filename_selezionato
-      filename_selezionato="${filename_selezionato%.txt}"
-      ./EDS_GEN/edsToRaw/edsToRaw "samples/$filename_selezionato" "samples/${filename_selezionato}_e.txt"
+      filename_new="${filename_selezionato%.*}"
+      ./EDS_GEN/edsToRaw/edsToRaw "samples/$filename_selezionato" "samples/${filename_new}_e.txt"
 
     else
       echo "Errore: La directory in questione non esiste o non è accessbile. Riprova con ./install.sh"
@@ -142,13 +142,15 @@ run_program4() {
   echo "Lista dei file in samples:"
   ls -al samples/
   read -p "Inserisci il nome del file da selezionare: " filename_selezionato
-  filename_selezionato="${filename_selezionato%.txt}"
+ 
   if [ -f "samples/$filename_selezionato" ]; then
     echo "-------------------------------------"
     echo "Avvio BWT di ${filename_selezionato}"
     echo "-------------------------------------"
     pwd
-    ./gsufsort/gsufsort "samples/${filename_selezionato}" --txt --bwt --time --output "samples/${filename_selezionato}"
+    filename_new="${filename_selezionato%.*}"
+    
+    ./gsufsort/gsufsort "samples/${filename_selezionato}" --txt --bwt --time --output "samples/${filename_new}_b"
 
     echo "Completato. Puoi ora controllare in samples/ l'output"
   
@@ -167,7 +169,7 @@ run_program5() {
     echo "Lista dei file in samples:"
     ls samples/
     read -p "Inserisci il nome del file da selezionare: " filename_selezionato
-    filename_selezionato="${filename_selezionato%.txt}"
+    filename_new="${filename_selezionato%.*}"
     
     # Controlla se il file esiste nella cartella specificata
     if [[ -f "samples/$filename_selezionato" ]]; then
@@ -175,15 +177,15 @@ run_program5() {
         
         # Compressione del file RAW in vari formati
         echo "Compressione del file RAW in corso..."
-        7z a -mx=5 -m0=PPMd "file_compressed/${filename_selezionato}_PPMd.7z" samples/"$filename_selezionato"
+        7z a -mx=5 -m0=PPMd "file_compressed/${filename_new}_PPMd.7z" samples/"$filename_selezionato"
         echo "*******************************************************************************************************************************"
-        7z a -mx=5 -m0=LZMA "file_compressed/${filename_selezionato}_LZMA.7z" samples/"$filename_selezionato"
+        7z a -mx=5 -m0=LZMA "file_compressed/${filename_new}_LZMA.7z" samples/"$filename_selezionato"
         echo "*******************************************************************************************************************************"
-        7z a -mx=5 -m0=LZMA2 "file_compressed/${filename_selezionato}_LZMA2.7z" samples/"$filename_selezionato" 
+        7z a -mx=5 -m0=LZMA2 "file_compressed/${filename_new}_LZMA2.7z" samples/"$filename_selezionato" 
         echo "*******************************************************************************************************************************"
-        7z a -mx=5 -m0=BZip2 "file_compressed/${filename_selezionato}_BZip2.7z" samples/"$filename_selezionato"
+        7z a -mx=5 -m0=BZip2 "file_compressed/${filename_new}_BZip2.7z" samples/"$filename_selezionato"
         echo "*******************************************************************************************************************************"
-        7z a -mx=5 -m0=Deflate64 "file_compressed/${filename_selezionato}_Deflate64.7z" samples/"$filename_selezionato"
+        7z a -mx=5 -m0=Deflate64 "file_compressed/${filename_new}_Deflate64.7z" samples/"$filename_selezionato"
         # Solo con p7zip "non ufficiale"
         #echo "***************************************************************************************************"
         #7z a -mx=5 -m0=LZ4 "file_compressed/${filename_selezionato}_LZ4.7z" samples/"$filename_selezionato"
