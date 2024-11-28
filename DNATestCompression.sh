@@ -124,7 +124,8 @@ run_program3() {
       done
       echo "--------------------------------"
       read -p "Inserisci il nome del file da selezionare: " filename_selezionato
-      ./EDS_GEN/edsToRaw/edsToRaw "samples/$filename_selezionato" "samples/${filename_selezionato}_ext.txt"
+      filename_selezionato="${filename_selezionato%.txt}"
+      ./EDS_GEN/edsToRaw/edsToRaw "samples/$filename_selezionato" "samples/${filename_selezionato}_e.txt"
 
     else
       echo "Errore: La directory in questione non esiste o non è accessbile. Riprova con ./install.sh"
@@ -141,12 +142,13 @@ run_program4() {
   echo "Lista dei file in samples:"
   ls -al samples/
   read -p "Inserisci il nome del file da selezionare: " filename_selezionato
+  filename_selezionato="${filename_selezionato%.txt}"
   if [ -f "samples/$filename_selezionato" ]; then
     echo "-------------------------------------"
     echo "Avvio BWT di ${filename_selezionato}"
     echo "-------------------------------------"
     pwd
-    ./gsufsort/gsufsort "samples/${filename_selezionato}" --txt --bwt --time --output "samples/${filename_selezionato}_bwt"
+    ./gsufsort/gsufsort "samples/${filename_selezionato}" --txt --bwt --time --output "samples/${filename_selezionato}"
 
     echo "Completato. Puoi ora controllare in samples/ l'output"
   
@@ -165,6 +167,7 @@ run_program5() {
     echo "Lista dei file in samples:"
     ls samples/
     read -p "Inserisci il nome del file da selezionare: " filename_selezionato
+    filename_selezionato="${filename_selezionato%.txt}"
     
     # Controlla se il file esiste nella cartella specificata
     if [[ -f "samples/$filename_selezionato" ]]; then
@@ -484,7 +487,7 @@ case $tipo_file in
             # Se l'utente ha scelto 1, crea un nuovo file RAW
 
             echo "Creazione del file RAW..."
-            read -p "Enter output name: " filename_selezionato
+            read -p "Enter output name (Senza estensione): " filename_selezionato
             read -p "Enter TOTsize: " TOTsize
             ./mainEDS-GEN --type R --outputName ../samples/"${filename_selezionato}" --totSize "${TOTsize}"
             filename_selezionato="${filename_selezionato}.txt"
@@ -511,7 +514,7 @@ case $tipo_file in
 
         # Conferma il file creato o selezionato
         echo "File creato/selezionato: $filename_selezionato"
-
+        filename_selezionato="${filename_selezionato%.txt}"
         cd ..
 
         pwd
