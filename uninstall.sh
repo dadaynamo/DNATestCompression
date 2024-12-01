@@ -1,1 +1,1 @@
-rm -rf EDS_GEN/ DNAStructureInfo/ gsufsort/ file_compressed/
+rm -rf EDS_GEN/ DNAStructureInfo/ gsufsort/
