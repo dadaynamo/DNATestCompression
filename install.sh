@@ -48,6 +48,11 @@ cd EDS_GEN/stringCheck
 make
 cd -
 
+git clone "https://github.com/simongog/sdsl-lite.git"
+cd sddl-lite
+./install.sh ../
+cd ..
+
 echo -n "Caricamento: ["
 # Esegui un ciclo per simulare il progresso
 for ((i = 0; i <= 50; i++)); do
