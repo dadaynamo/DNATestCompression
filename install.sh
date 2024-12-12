@@ -18,6 +18,14 @@ for repo in "${repos[@]}"; do
     echo "Clonazione completata per $repo."
 done
 
+cd DNAStructureInfo
+make
+cd -
+
+cd EDS-GEN 
+make
+cd -
+
 # Compilazione edsToRaw
 cd EDS_GEN/edsToRaw
 make
@@ -35,6 +43,11 @@ cd -
 git clone "https://github.com/simongog/sdsl-lite.git"
 cd sdsl-lite
 ./install.sh ../
+cd -
+
+git clone "https://github.com/giovannarosone/EDS-BWT.git"
+cd EDS-BWT
+make 
 cd -
 
 echo -n "Caricamento: ["

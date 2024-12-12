@@ -15,6 +15,7 @@ show_menu() {
   echo -e "| \e[32m7)\e[0m Check delle cartelle              |" // OK
   echo -e "| \e[32m8)\e[0m Mostra contenuto file             |" // OK
   echo -e "| \e[32m9)\e[0m Stampa CSV                        |" // OK 
+  echo -e "| \e[32m10)\e[0m EDS-BWT                          |" 
   echo -e "| \e[32m0)\e[0m Esci                              |"
   echo "----------------------------------------"
 }
@@ -374,6 +375,51 @@ run_program9() {
   cd -
 }
 
+run_program10() {
+  # Directory dei file .eds
+  SAMPLE_DIR="samples/"
+
+  # Mostra la lista dei file con estensione .eds nella cartella samples/
+  echo "File disponibili nella cartella $SAMPLE_DIR:"
+  eds_files=("$SAMPLE_DIR"*.eds)
+  if [ ${#eds_files[@]} -eq 0 ]; then
+      echo "Nessun file .eds trovato nella cartella $SAMPLE_DIR."
+      exit 1
+  fi
+  for file in "${eds_files[@]}"; do
+      echo "- $(basename "$file")"
+  done
+
+  # Richiedi all'utente di selezionare un file
+  echo -n "Inserisci il nome del file (inclusa estensione .eds): "
+  read selected_file
+
+  # Controlla che il file esista
+  if [ ! -f "$SAMPLE_DIR$selected_file" ]; then
+      echo "Errore: il file '$selected_file' non esiste nella cartella $SAMPLE_DIR."
+      exit 1
+  fi
+
+  # Rimuove l'estensione .eds
+  input_base_name="${selected_file%.eds}"
+  echo "Nome base del file selezionato: $input_base_name"
+
+  # Richiedi all'utente il nome del file output senza estensione
+  echo -n "Inserisci il nome del file output (senza estensione): "
+  read output_base_name
+
+  # Esegui il programma EDS-BWT
+  cd EDS-BWT
+  mkdir -p ../samples/ebwt
+  ./EDS-BWTransform.sh "../$SAMPLE_DIR$input_base_name" "../samples/ebwt/$output_base_name"
+  
+  echo "Operazione completata. File output generato: ../samples/ebwt/$output_base_name"
+  cd -
+
+
+}
+
+
 ## START -------------------------------------------------------------------------------------------------------------
 
 # Controllo se i file sono stati installati
@@ -417,7 +463,7 @@ while true; do
     7)
         pwd
         # Chiedi all'utente di inserire il nome della cartella
-        echo "Inserisci il nome della cartella che vuoi visualizzare: {"samples", "file_compressed", "csv"}"
+        echo "Inserisci il nome della cartella che vuoi visualizzare: {"samples", "file_compressed", "csv", "samples/ebwt"}"
         read folder_name
 
         # Chiamata alla funzione con il nome della cartella inserita
@@ -433,6 +479,9 @@ while true; do
         clear
         run_program9
 
+      ;;
+    10)
+      run_program10
       ;;
     0)
         clear
