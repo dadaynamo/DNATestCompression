@@ -18,3 +18,35 @@ for repo in "${repos[@]}"; do
     echo "Clonazione completata per $repo."
 done
 
+# Compilazione edsToRaw
+cd EDS_GEN/edsToRaw
+make
+cd -
+
+cd EDS_GEN/stringCheck
+make
+cd -
+
+git clone "https://github.com/felipelouza/gsufsort.git"
+cd gsufsort
+make TERMINATOR=0 DNA=1
+cd -
+
+git clone "https://github.com/simongog/sdsl-lite.git"
+cd sdsl-lite
+./install.sh ../
+cd -
+
+echo -n "Caricamento: ["
+# Esegui un ciclo per simulare il progresso
+for ((i = 0; i <= 50; i++)); do
+    sleep 0.1  # Ritardo per simulare un'attesa
+    echo -n "#"
+done
+echo "] Completato!"
+sleep 1
+clear
+echo "\ Ricordati di inserire in EDS-BWT nel file EDS-BWTransform.sh come path GSUFPATH = "../gsufsort" /"
+echo "\ E nel makefile di EDS-BWT nel campo SDSL_INC = "../include" e in SDSL_LIB = "../lib" /"
+sleep 15
+clear
