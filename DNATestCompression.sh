@@ -16,6 +16,7 @@ show_menu() {
   echo -e "| \e[32m8)\e[0m Mostra contenuto file             |" // OK
   echo -e "| \e[32m9)\e[0m Stampa CSV                        |" // OK 
   echo -e "| \e[32m10)\e[0m EDS-BWT                          |" 
+  echo -e "| \e[32m11)\e[0m Rimuovi ultima riga in csv       |" 
   echo -e "| \e[32m0)\e[0m Esci                              |"
   echo "----------------------------------------"
 }
@@ -419,7 +420,34 @@ run_program10() {
 
 }
 
+run_program11(){
 
+# Funzione per stampare la lista di file CSV nella cartella csv/
+    clear
+    echo "Lista dei file CSV nella directory csv/:"
+    if [ -d "csv" ]; then
+      cd csv
+      ls *.csv 2>/dev/null || echo "Nessun file CSV trovato."
+      echo -n "Inserisci il nome completo del file CSV "
+      read file_name
+      if [ -f "$file_name" ]; then
+          if [ -f "$file_name" ]; then
+              # Rimuovi l'ultima riga
+              head -n -1 "$file_name" > temp_file && mv temp_file "$file_name"
+              echo "L'ultima riga del file $file è stata rimossa."
+          else
+              echo "Errore: il file $file non esiste."
+          fi
+      else
+          echo "Errore: il file $file_name non esiste."
+      fi
+      cd -
+    else
+        echo "Errore. La directory 'csv/' non è stata trovata, riprovare."
+    fi
+
+
+}
 ## START -------------------------------------------------------------------------------------------------------------
 
 # Controllo se i file sono stati installati
@@ -483,13 +511,16 @@ while true; do
     10)
       run_program10
       ;;
+    11)
+      run_program11
+      ;;
     0)
         clear
       echo "Uscita..."
       exit 0
       ;;
     *)
-      echo "Scelta non valida. Per favore inserisci un numero tra 0 e 7."
+      echo "Scelta non valida. Per favore inserisci un numero tra 0 e 11."
       ;;
   esac
 done
