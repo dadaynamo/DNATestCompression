@@ -16,7 +16,11 @@ show_menu() {
   echo -e "| \e[32m8)\e[0m Mostra contenuto file             |" // OK
   echo -e "| \e[32m9)\e[0m Stampa CSV                        |" // OK 
   echo -e "| \e[32m10)\e[0m EDS-BWT                          |" 
-  echo -e "| \e[32m11)\e[0m Rimuovi ultima riga in csv       |" 
+  echo -e "| \e[32m11)\e[0m Aggiungi intestazione ind in csv |" 
+  echo -e "| \e[32m12)\e[0m Aggiungi intestazione comp in csv|" 
+  echo -e "| \e[32m13)\e[0m Aggiungi riga individuale in csv |" 
+  echo -e "| \e[32m14)\e[0m Aggiungi riga di confronto csv   |" 
+  echo -e "| \e[32m15)\e[0m Rimuovi ultima riga in csv       |" 
   echo -e "| \e[32m0)\e[0m Esci                              |"
   echo "----------------------------------------"
 }
@@ -420,9 +424,101 @@ run_program10() {
 
 }
 
-run_program11(){
+run_program11() {
+echo "test"
+}
+run_program12() {
+echo "test"
+}
+run_program13() { #Aggiunta riga individuale per i raw
+  clear    # Passaggi per selezionare il file .txt dalla cartella samples
+    echo "Seleziona un file .txt dalla cartella samples/"
 
-# Funzione per stampare la lista di file CSV nella cartella csv/
+    # Elenco dei file .txt nella cartella samples
+    files=($(ls samples/*.txt 2>/dev/null))
+
+    if [ ${#files[@]} -gt 0 ]; then
+        echo "File disponibili nella cartella samples/:"
+        for i in "${!files[@]}"; do
+            echo "$((i + 1)). $(basename "${files[$i]}")"
+        done
+
+        # Chiedi all'utente di inserire il nome del file
+        read -p "Inserisci il nome del file .txt da selezionare: " nome_file
+        inOrigin=""
+
+        # Verifica se il file selezionato esiste nella cartella
+        for file in "${files[@]}"; do
+            if [ "$(basename "$file")" == "$nome_file" ]; then
+                inOrigin="$file"
+                echo "Hai selezionato: $file"
+                break
+            fi
+        done
+
+        if [ -z "$inOrigin" ]; then
+            echo "Errore: Il file '$nome_file' non esiste nella cartella samples/."
+            return 1
+        fi
+    else
+        echo "Nessun file .txt trovato nella cartella samples/."
+        return 1
+    fi
+
+    # Passaggi per selezionare il file .csv dalla cartella csv
+    echo "Seleziona un file .csv dalla cartella csv/"
+
+    # Elenco dei file .csv nella cartella csv
+    files_csv=($(ls csv/*.csv 2>/dev/null))
+
+    if [ ${#files_csv[@]} -gt 0 ]; then
+        echo "File disponibili nella cartella csv/:"
+        for i in "${!files_csv[@]}"; do
+            echo "$((i + 1)). $(basename "${files_csv[$i]}")"
+        done
+
+        # Chiedi all'utente di inserire il nome del file
+        read -p "Inserisci il nome del file .csv da selezionare: " nome_file_csv
+        outputName=""
+
+        # Verifica se il file selezionato esiste nella cartella
+        for file in "${files_csv[@]}"; do
+            if [ "$(basename "$file")" == "$nome_file_csv" ]; then
+                outputName="$file"
+                # Rimuovi l'estensione .csv dal nome del file
+                outputName=$(basename "$outputName" .csv)
+                echo "Hai selezionato: $outputName"
+                break
+            fi
+        done
+
+        if [ -z "$outputName" ]; then
+            echo "Errore: Il file '$nome_file_csv' non esiste nella cartella csv/."
+            return 1
+        fi
+    else
+        echo "Nessun file .csv trovato nella cartella csv/."
+        return 1
+    fi
+
+    # Se tutto è andato a buon fine, stampa OK
+    echo "OK"
+    echo "File inOrigin selezionato: $inOrigin"
+    echo "File outputName selezionato: $outputName"
+
+
+  #esegui il comando
+  ./DNAStructureInfo/main2/main2DNAStructureInfo --type I --typeOut C --profile A --outputName csv/"${outputName}" --inOrigin samples/"${inOrigin}"
+  pwd
+}
+run_program14() {
+echo "test"
+}
+
+
+run_program15() {
+
+    # Funzione per stampare la lista di file CSV nella cartella csv/
     clear
     echo "Lista dei file CSV nella directory csv/:"
     if [ -d "csv" ]; then
@@ -513,6 +609,18 @@ while true; do
       ;;
     11)
       run_program11
+      ;;
+    12)
+      run_program12
+      ;;
+    13)
+      run_program13
+      ;;
+    14)
+      run_program14
+      ;;
+    15)
+      run_program15
       ;;
     0)
         clear
