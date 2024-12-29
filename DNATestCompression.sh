@@ -6,15 +6,15 @@
 show_menu() {
   echo "----------------------------------------"
   echo -e "| \e[32mScegli un Opzione\e[0m                    |"
-  echo -e "| \e[32m1)\e[0m Generazione DNA in vari formati   |" // OK
-  echo -e "| \e[32m2)\e[0m Controllo EDS creati              |" // OK ma da controllare perche esce un output strano
-  echo -e "| \e[32m3)\e[0m EDS to RAW                        |" // OK
-  echo -e "| \e[32m4)\e[0m BWT di file                       |" // OK
-  echo -e "| \e[32m5)\e[0m Compressione file                 |" // OK
-  echo -e "| \e[32m6)\e[0m Confronto tra file                |" // Da fare il confronto tra file
-  echo -e "| \e[32m7)\e[0m Check delle cartelle              |" // OK
-  echo -e "| \e[32m8)\e[0m Mostra contenuto file             |" // OK
-  echo -e "| \e[32m9)\e[0m Stampa CSV                        |" // OK 
+  echo -e "| \e[32m1)\e[0m Generazione DNA in vari formati   |"
+  echo -e "| \e[32m2)\e[0m Controllo EDS creati              |"
+  echo -e "| \e[32m3)\e[0m EDS to RAW                        |"
+  echo -e "| \e[32m4)\e[0m BWT di file                       |"
+  echo -e "| \e[32m5)\e[0m Compressione file                 |"
+  echo -e "| \e[32m6)\e[0m Confronto tra file  (NO)          |"
+  echo -e "| \e[32m7)\e[0m Check delle cartelle              |"
+  echo -e "| \e[32m8)\e[0m Mostra contenuto file             |"
+  echo -e "| \e[32m9)\e[0m Stampa CSV                        |"  
   echo -e "| \e[32m10)\e[0m EDS-BWT                          |" 
   echo -e "| \e[32m11)\e[0m Aggiungi intestazione ind in csv |" 
   echo -e "| \e[32m12)\e[0m Aggiungi intestazione comp in csv|" 
@@ -376,7 +376,9 @@ run_program9() {
   fi
 
   #Apertura file csv in terminale
+  echo "************************************************"
   cat "$file_name" | column -s, -t
+  echo "************************************************"
   cd -
 }
 
@@ -425,90 +427,135 @@ run_program10() {
 }
 
 run_program11() {
-echo "test"
+  clear
+  # Elenca tutti i file con estensione .csv nella cartella csv/
+  echo "File CSV nella cartella csv/:"
+  for file in csv/*.csv; do
+    if [ -f "$file" ]; then
+        basename "$file"
+    fi
+  done
+  # Chiede all'utente di inserire il nome di un file
+  read -p "Inserisci il nome del file o creane uno nuovo (con estensione .csv): " file_name
+
+  # Controlla se il file esiste nella cartella csv/
+  if [ -f "csv/$file_name" ]; then
+    # Rimuove l'estensione dal nome del file
+    file_base_name="${file_name%.csv}"
+    ./DNAStructureInfo/mainDNAStructureInfo --type HI --outputName csv/"${file_base_name}"
+  else
+    # Rimuove l'estensione dal nome del file
+    file_base_name="${file_name%.csv}"
+    echo "Il file '$file_name' non esiste nella cartella csv. Creazione completata"
+    ./DNAStructureInfo/mainDNAStructureInfo --type HI --outputName csv/"${file_base_name}"
+  fi
+
 }
 run_program12() {
-echo "test"
+  clear
+  # Elenca tutti i file con estensione .csv nella cartella csv/
+  echo "File CSV nella cartella csv/:"
+  for file in csv/*.csv; do
+    if [ -f "$file" ]; then
+        basename "$file"
+    fi
+  done
+  # Chiede all'utente di inserire il nome di un file
+  read -p "Inserisci il nome del file o creane uno nuovo (con estensione .csv): " file_name
+
+  # Controlla se il file esiste nella cartella csv/
+  if [ -f "csv/$file_name" ]; then
+    # Rimuove l'estensione dal nome del file
+    file_base_name="${file_name%.csv}"
+    ./DNAStructureInfo/mainDNAStructureInfo --type HC --outputName csv/"${file_base_name}"
+  else
+    # Rimuove l'estensione dal nome del file
+    file_base_name="${file_name%.csv}"
+    echo "Il file '$file_name' non esiste nella cartella csv. Creazione completata"
+    ./DNAStructureInfo/mainDNAStructureInfo --type HC --outputName csv/"${file_base_name}"
+  fi
+
+ 
 }
 run_program13() { #Aggiunta riga individuale per i raw
   clear    # Passaggi per selezionare il file .txt dalla cartella samples
-    echo "Seleziona un file .txt dalla cartella samples/"
+  echo "Seleziona un file .txt dalla cartella samples/"
 
-    # Elenco dei file .txt nella cartella samples
-    files=($(ls samples/*.txt 2>/dev/null))
+  # Elenco dei file .txt nella cartella samples
+  files=($(ls samples/*.txt 2>/dev/null))
 
-    if [ ${#files[@]} -gt 0 ]; then
-        echo "File disponibili nella cartella samples/:"
-        for i in "${!files[@]}"; do
-            echo "$((i + 1)). $(basename "${files[$i]}")"
-        done
+  if [ ${#files[@]} -gt 0 ]; then
+      echo "File disponibili nella cartella samples/:"
+      for i in "${!files[@]}"; do
+          echo "$((i + 1)). $(basename "${files[$i]}")"
+      done
 
-        # Chiedi all'utente di inserire il nome del file
-        read -p "Inserisci il nome del file .txt da selezionare: " nome_file
-        inOrigin=""
+      # Chiedi all'utente di inserire il nome del file
+      read -p "Inserisci il nome del file .txt da selezionare: " nome_file
+      inOrigin=""
 
-        # Verifica se il file selezionato esiste nella cartella
-        for file in "${files[@]}"; do
-            if [ "$(basename "$file")" == "$nome_file" ]; then
-                inOrigin="$file"
-                echo "Hai selezionato: $file"
-                break
-            fi
-        done
+      # Verifica se il file selezionato esiste nella cartella
+      for file in "${files[@]}"; do
+          if [ "$(basename "$file")" == "$nome_file" ]; then
+              inOrigin="$file"
+              echo "Hai selezionato: $file"
+              break
+          fi
+      done
 
-        if [ -z "$inOrigin" ]; then
-            echo "Errore: Il file '$nome_file' non esiste nella cartella samples/."
-            return 1
-        fi
-    else
-        echo "Nessun file .txt trovato nella cartella samples/."
-        return 1
-    fi
+      if [ -z "$inOrigin" ]; then
+          echo "Errore: Il file '$nome_file' non esiste nella cartella samples/."
+          return 1
+      fi
+  else
+      echo "Nessun file .txt trovato nella cartella samples/."
+      return 1
+  fi
 
-    # Passaggi per selezionare il file .csv dalla cartella csv
-    echo "Seleziona un file .csv dalla cartella csv/"
+  # Passaggi per selezionare il file .csv dalla cartella csv
+  echo "Seleziona un file .csv dalla cartella csv/"
 
-    # Elenco dei file .csv nella cartella csv
-    files_csv=($(ls csv/*.csv 2>/dev/null))
+  # Elenco dei file .csv nella cartella csv
+  files_csv=($(ls csv/*.csv 2>/dev/null))
 
-    if [ ${#files_csv[@]} -gt 0 ]; then
-        echo "File disponibili nella cartella csv/:"
-        for i in "${!files_csv[@]}"; do
-            echo "$((i + 1)). $(basename "${files_csv[$i]}")"
-        done
+  if [ ${#files_csv[@]} -gt 0 ]; then
+      echo "File disponibili nella cartella csv/:"
+      for i in "${!files_csv[@]}"; do
+          echo "$((i + 1)). $(basename "${files_csv[$i]}")"
+      done
 
-        # Chiedi all'utente di inserire il nome del file
-        read -p "Inserisci il nome del file .csv da selezionare: " nome_file_csv
-        outputName=""
+      # Chiedi all'utente di inserire il nome del file
+      read -p "Inserisci il nome del file .csv da selezionare: " nome_file_csv
+      outputName=""
 
-        # Verifica se il file selezionato esiste nella cartella
-        for file in "${files_csv[@]}"; do
-            if [ "$(basename "$file")" == "$nome_file_csv" ]; then
-                outputName="$file"
-                # Rimuovi l'estensione .csv dal nome del file
-                outputName=$(basename "$outputName" .csv)
-                echo "Hai selezionato: $outputName"
-                break
-            fi
-        done
+      # Verifica se il file selezionato esiste nella cartella
+      for file in "${files_csv[@]}"; do
+          if [ "$(basename "$file")" == "$nome_file_csv" ]; then
+              outputName="$file"
+              # Rimuovi l'estensione .csv dal nome del file
+              outputName=$(basename "$outputName" .csv)
+              echo "Hai selezionato: $outputName"
+              break
+          fi
+      done
 
-        if [ -z "$outputName" ]; then
-            echo "Errore: Il file '$nome_file_csv' non esiste nella cartella csv/."
-            return 1
-        fi
-    else
-        echo "Nessun file .csv trovato nella cartella csv/."
-        return 1
-    fi
+      if [ -z "$outputName" ]; then
+          echo "Errore: Il file '$nome_file_csv' non esiste nella cartella csv/."
+          return 1
+      fi
+  else
+      echo "Nessun file .csv trovato nella cartella csv/."
+      return 1
+  fi
 
-    # Se tutto è andato a buon fine, stampa OK
-    echo "OK"
-    echo "File inOrigin selezionato: $inOrigin"
-    echo "File outputName selezionato: $outputName"
+  # Se tutto è andato a buon fine, stampa OK
+  echo "OK"
+  echo "File inOrigin selezionato: $inOrigin"
+  echo "File outputName selezionato: $outputName"
 
-
+  # ./DNAStructureInfo/mainDNAStructureInfo --type I --typeOut C --profile A --outputName csv/test --inOrigin samples/smalldna.txt
   #esegui il comando
-  ./DNAStructureInfo/main2/main2DNAStructureInfo --type I --typeOut C --profile A --outputName csv/"${outputName}" --inOrigin samples/"${inOrigin}"
+  ./DNAStructureInfo/mainDNAStructureInfo --type I --typeOut C --outputName csv/"${outputName}" --inOrigin samples/"${inOrigin}"
   pwd
 }
 run_program14() {
@@ -544,6 +591,9 @@ run_program15() {
 
 
 }
+
+
+
 ## START -------------------------------------------------------------------------------------------------------------
 
 # Controllo se i file sono stati installati
@@ -595,14 +645,12 @@ while true; do
         
       ;;
     8)
-        clear
-        run_program8
-
+      clear
+      run_program8
       ;;
     9)
-        clear
-        run_program9
-
+      clear
+      run_program9
       ;;
     10)
       run_program10
@@ -623,7 +671,7 @@ while true; do
       run_program15
       ;;
     0)
-        clear
+      clear
       echo "Uscita..."
       exit 0
       ;;
