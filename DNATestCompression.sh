@@ -25,7 +25,7 @@ show_menu() {
   echo "----------------------------------------"
 }
 
-# Funzione per eseguire il Programma 1
+
 run_program1() {
     clear
 
@@ -86,7 +86,7 @@ run_program1() {
 
 }
 
-# Funzione per eseguire il Programma 2
+
 run_program2() {
     clear
 
@@ -115,7 +115,7 @@ run_program2() {
 
 }
 
-# Funzione per eseguire il Programma 3
+
 run_program3() {
   clear
   pwd
@@ -141,7 +141,7 @@ run_program3() {
   
   
 }
-# Funzione per eseguire il Programma 1
+
 run_program4() {
   clear
   # Mostra la lista dei file sample
@@ -166,7 +166,7 @@ run_program4() {
 
 }
 
-# Funzione per eseguire il Programma 2
+
 run_program5() {
   clear
   # Verifica se la cartella esiste
@@ -174,45 +174,45 @@ run_program5() {
     # Mostra la lista dei file sample
     echo "Lista dei file in samples:"
     ls samples/
-    read -p "Inserisci il nome del file da selezionare: " filename_selezionato
-    filename_new="${filename_selezionato%.*}"
-    
-    # Controlla se il file esiste nella cartella specificata
-    if [[ -f "samples/$filename_selezionato" ]]; then
-        echo "Il file $filename_selezionato è stato selezionato correttamente"
-        
-        # Compressione del file RAW in vari formati
-        echo "Compressione del file RAW in corso..."
-        7z a -mx=5 -m0=PPMd "file_compressed/${filename_new}_PPMd.7z" samples/"$filename_selezionato"
-        echo "*******************************************************************************************************************************"
-        7z a -mx=5 -m0=LZMA "file_compressed/${filename_new}_LZMA.7z" samples/"$filename_selezionato"
-        echo "*******************************************************************************************************************************"
-        7z a -mx=5 -m0=LZMA2 "file_compressed/${filename_new}_LZMA2.7z" samples/"$filename_selezionato" 
-        echo "*******************************************************************************************************************************"
-        7z a -mx=5 -m0=BZip2 "file_compressed/${filename_new}_BZip2.7z" samples/"$filename_selezionato"
-        echo "*******************************************************************************************************************************"
-        7z a -mx=5 -m0=Deflate64 "file_compressed/${filename_new}_Deflate64.7z" samples/"$filename_selezionato"
-        # Solo con p7zip "non ufficiale"
-        #echo "***************************************************************************************************"
-        #7z a -mx=5 -m0=LZ4 "file_compressed/${filename_selezionato}_LZ4.7z" samples/"$filename_selezionato"
-        echo "*******************************************************************************************************************************"
-        echo "compressioni eseguite"
+    read -p "Inserisci i nomi dei file da selezionare (separati da spazi): " -a file_list
+    archive_name=""
 
-        #gzip -c samples/"$filename_selezionato" > "file_compressed/${filename_selezionato}.gz"
-        #bzip2 -c samples/"$filename_selezionato" > "file_compressed/${filename_selezionato}.bz2"
-        #xz -c "samples/$filename_selezionato" > "file_compressed/${filename_selezionato}.xz"
-        #echo "file compressi correttamente"
-    else
-        echo "Il file $filename_selezionato non esiste nella cartella $cartella. Riprova!!"
+    # Controlla se i file esistono nella cartella specificata
+    for file in "${file_list[@]}"; do
+      if [[ ! -f "samples/$file" ]]; then
+        echo "Il file $file non esiste nella cartella samples. Riprova!"
         exit 1
-    fi
-  
+      fi
+      # Crea un nome base per l'archivio dai nomi dei file (es. file1_file2)
+      base_name="${file%.*}"
+      archive_name="${archive_name}_${base_name}"
+    done
+
+    archive_name="${archive_name#_}" # Rimuove il primo underscore dal nome dell'archivio
+    echo "I file selezionati sono: ${file_list[*]}"
+    echo "Nome dell'archivio: $archive_name"
+
+    # Compressione dei file RAW in vari formati
+    echo "Compressione dei file RAW in corso..."
+    7z a -mx=5 -m0=PPMd "file_compressed/${archive_name}_PPMd.7z" "${file_list[@]/#/samples/}"
+    echo "*******************************************************************************************************************************"
+    7z a -mx=5 -m0=LZMA "file_compressed/${archive_name}_LZMA.7z" "${file_list[@]/#/samples/}"
+    echo "*******************************************************************************************************************************"
+    7z a -mx=5 -m0=LZMA2 "file_compressed/${archive_name}_LZMA2.7z" "${file_list[@]/#/samples/}"
+    echo "*******************************************************************************************************************************"
+    7z a -mx=5 -m0=BZip2 "file_compressed/${archive_name}_BZip2.7z" "${file_list[@]/#/samples/}"
+    echo "*******************************************************************************************************************************"
+    7z a -mx=5 -m0=Deflate64 "file_compressed/${archive_name}_Deflate64.7z" "${file_list[@]/#/samples/}"
+    echo "*******************************************************************************************************************************"
+    echo "Compressioni eseguite correttamente."
+
   else
-      echo "Riavviare il programma con ./install.h"
+    echo "Riavviare il programma con ./install.h"
   fi
 }
 
-# Funzione per eseguire il Programma 3
+
+
 run_program6() {
   clear
   # Stampa della cartella samples e file_compressed
@@ -284,7 +284,6 @@ run_program6() {
 }
 
 
-# Funzione per eseguire il Programma 1
 run_program7() {
     clear
     folder=$1  # Prende il nome della cartella come argomento
@@ -418,9 +417,9 @@ run_program10() {
   # Esegui il programma EDS-BWT
   cd EDS-BWT
   mkdir -p ../samples/ebwt
-  ./EDS-BWTransform.sh "../$SAMPLE_DIR$input_base_name" "../samples/ebwt/$output_base_name"
+  ./EDS-BWTransform.sh "../$SAMPLE_DIR$input_base_name" "../samples/$output_base_name"
   
-  echo "Operazione completata. File output generato: ../samples/ebwt/$output_base_name"
+  echo "Operazione completata. File output generato: ../samples/$output_base_name"
   cd -
 
 
@@ -662,7 +661,6 @@ run_program14() { #Aggiunta riga comparazione per i raw
 
 
 }
-
 
 run_program15() {
 
