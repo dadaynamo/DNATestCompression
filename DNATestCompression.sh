@@ -560,10 +560,10 @@ run_program13() { #Aggiunta riga individuale per i raw
 }
 run_program14() { #Aggiunta riga comparazione per i raw
   clear    # Passaggi per selezionare il file .txt dalla cartella samples
-  echo "Seleziona un file .txt dalla cartella samples/"
+  echo "Seleziona un file dalla cartella samples/"
 
   # Elenco dei file .txt nella cartella samples
-  files=($(ls samples/*.txt 2>/dev/null))
+  files=($(ls samples/ 2>/dev/null))
 
   if [ ${#files[@]} -gt 0 ]; then
       echo "File disponibili nella cartella samples/:"
@@ -589,7 +589,7 @@ run_program14() { #Aggiunta riga comparazione per i raw
           return 1
       fi
       # Chiedi all'utente di inserire il nome del file
-      read -p "Inserisci il nome del file .txt da selezionare: " nome_file
+      read -p "Inserisci il nome del file da selezionare: " nome_file
       inComp=""
 
       # Verifica se il file selezionato esiste nella cartella
