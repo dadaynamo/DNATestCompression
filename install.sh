@@ -21,7 +21,7 @@ done
 cd DNAStructureInfo
 make
 cd -
-cd EDS-GEN 
+cd EDS_GEN 
 make
 cd -
 
