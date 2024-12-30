@@ -1,1 +1,1 @@
-rm -rf EDS_GEN/ DNAStructureInfo/ gsufsort/
+rm -rf EDS_GEN/ DNAStructureInfo/ gsufsort/ sdsl-lite/ lib/ include/ EDS-BWT/
