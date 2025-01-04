@@ -416,7 +416,6 @@ run_program10() {
 
   # Esegui il programma EDS-BWT
   cd EDS-BWT
-  mkdir -p ../samples/ebwt
   ./EDS-BWTransform.sh "../$SAMPLE_DIR$input_base_name" "../samples/$output_base_name"
   
   echo "Operazione completata. File output generato: ../samples/$output_base_name"
