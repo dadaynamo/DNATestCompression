@@ -557,7 +557,6 @@ run_program13() { #Aggiunta riga individuale per i raw
   ./DNAStructureInfo/mainDNAStructureInfo --type I --typeOut C --outputName csv/"${outputName}" --inOrigin samples/"${inOrigin}"
   pwd
 }
-
 run_program14() { #Aggiunta riga comparazione per i raw
   clear    # Passaggi per selezionare il file .txt dalla cartella samples e file_compressed
   echo "Seleziona un file dalla cartella samples/ o file_compressed/"
@@ -655,7 +654,7 @@ run_program14() { #Aggiunta riga comparazione per i raw
   echo "File outputName selezionato: $outputName"
 
   
-  #esegui il comando
+  #esegui il comando con i percorsi completi
   ./DNAStructureInfo/mainDNAStructureInfo --type C --typeOut C --outputName csv/"${outputName}" --inOrigin "${inOrigin}" --inComp "${inComp}"
   pwd
 
