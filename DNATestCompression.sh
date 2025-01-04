@@ -167,20 +167,23 @@ run_program4() {
 }
 
 
-run_program5() {
+run_program5() { # compressione file
   clear
   # Verifica se la cartella esiste
   if [ -d "file_compressed" ]; then
-    # Mostra la lista dei file sample
-    echo "Lista dei file in samples:"
+    # Mostra la lista dei file in samples e file_compressed
+    echo "Lista dei file in samples e file_compressed:"
     ls samples/
+    ls file_compressed/
+
+    # Lettura dei file selezionati
     read -p "Inserisci i nomi dei file da selezionare (separati da spazi): " -a file_list
     archive_name=""
 
     # Controlla se i file esistono nella cartella specificata
     for file in "${file_list[@]}"; do
-      if [[ ! -f "samples/$file" ]]; then
-        echo "Il file $file non esiste nella cartella samples. Riprova!"
+      if [[ ! -f "samples/$file" && ! -f "file_compressed/$file" ]]; then
+        echo "Il file $file non esiste né in samples né in file_compressed. Riprova!"
         exit 1
       fi
       # Crea un nome base per l'archivio dai nomi dei file (es. file1_file2)
@@ -194,15 +197,15 @@ run_program5() {
 
     # Compressione dei file RAW in vari formati
     echo "Compressione dei file RAW in corso..."
-    7z a -mx=5 -m0=PPMd "file_compressed/${archive_name}_PPMd.7z" "${file_list[@]/#/samples/}"
+    7z a -mx=5 -m0=PPMd "file_compressed/${archive_name}_PPMd.7z" "${file_list[@]/#/samples/}" "${file_list[@]/#/file_compressed/}"
     echo "*******************************************************************************************************************************"
-    7z a -mx=5 -m0=LZMA "file_compressed/${archive_name}_LZMA.7z" "${file_list[@]/#/samples/}"
+    7z a -mx=5 -m0=LZMA "file_compressed/${archive_name}_LZMA.7z" "${file_list[@]/#/samples/}" "${file_list[@]/#/file_compressed/}"
     echo "*******************************************************************************************************************************"
-    7z a -mx=5 -m0=LZMA2 "file_compressed/${archive_name}_LZMA2.7z" "${file_list[@]/#/samples/}"
+    7z a -mx=5 -m0=LZMA2 "file_compressed/${archive_name}_LZMA2.7z" "${file_list[@]/#/samples/}" "${file_list[@]/#/file_compressed/}"
     echo "*******************************************************************************************************************************"
-    7z a -mx=5 -m0=BZip2 "file_compressed/${archive_name}_BZip2.7z" "${file_list[@]/#/samples/}"
+    7z a -mx=5 -m0=BZip2 "file_compressed/${archive_name}_BZip2.7z" "${file_list[@]/#/samples/}" "${file_list[@]/#/file_compressed/}"
     echo "*******************************************************************************************************************************"
-    7z a -mx=5 -m0=Deflate64 "file_compressed/${archive_name}_Deflate64.7z" "${file_list[@]/#/samples/}"
+    7z a -mx=5 -m0=Deflate64 "file_compressed/${archive_name}_Deflate64.7z" "${file_list[@]/#/samples/}" "${file_list[@]/#/file_compressed/}"
     echo "*******************************************************************************************************************************"
     echo "Compressioni eseguite correttamente."
 
