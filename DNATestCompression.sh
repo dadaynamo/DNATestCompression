@@ -558,11 +558,11 @@ run_program13() { #Aggiunta riga individuale per i raw
   pwd
 }
 run_program14() { #Aggiunta riga comparazione per i raw
-  clear    # Passaggi per selezionare il file .txt dalla cartella samples e file_compressed
+  clear    # Passaggi per selezionare il file da samples e file_compressed
   echo "Seleziona un file dalla cartella samples/ o file_compressed/"
 
-  # Elenco dei file .txt nella cartella samples e file_compressed
-  files=($(find samples/ file_compressed/ -type f -name "*.txt" 2>/dev/null))
+  # Elenco di tutti i file nella cartella samples e file_compressed
+  files=($(find samples/ file_compressed/ -type f 2>/dev/null))
 
   if [ ${#files[@]} -gt 0 ]; then
       echo "File disponibili nelle cartelle samples/ e file_compressed/:"
@@ -570,42 +570,24 @@ run_program14() { #Aggiunta riga comparazione per i raw
           echo "$((i + 1)). ${files[$i]}"
       done
 
-      # Chiedi all'utente di inserire il nome del file
-      read -p "Inserisci il nome del file .txt da selezionare: " nome_file
-      inOrigin=""
-
-      # Verifica se il file selezionato esiste nella lista completa
-      for file in "${files[@]}"; do
-          if [ "$(basename "$file")" == "$nome_file" ]; then
-              inOrigin="$file"
-              echo "Hai selezionato come inOrigin: $file"
-              break
-          fi
-      done
+      # Chiedi all'utente di selezionare l'indice del file
+      read -p "Inserisci l'indice del file da selezionare per inOrigin: " index
+      inOrigin="${files[$((index-1))]}"
 
       if [ -z "$inOrigin" ]; then
-          echo "Errore: Il file '$nome_file' non esiste nelle cartelle samples/ o file_compressed/."
+          echo "Errore: Indice non valido."
           return 1
       fi
 
-      read -p "Inserisci il nome del file da selezionare per inComp: " nome_file
-      inComp=""
-
-      # Verifica se il file selezionato esiste nella lista completa
-      for file in "${files[@]}"; do
-          if [ "$(basename "$file")" == "$nome_file" ]; then
-              inComp="$file"
-              echo "Hai selezionato come inComp: $file"
-              break
-          fi
-      done
+      read -p "Inserisci l'indice del file da selezionare per inComp: " index
+      inComp="${files[$((index-1))]}"
 
       if [ -z "$inComp" ]; then
-          echo "Errore: Il file '$nome_file' non esiste nelle cartelle samples/ o file_compressed/."
+          echo "Errore: Indice non valido."
           return 1
       fi
   else
-      echo "Nessun file .txt trovato nelle cartelle samples/ o file_compressed/."
+      echo "Nessun file trovato nelle cartelle samples/ o file_compressed/."
       return 1
   fi
 
@@ -622,22 +604,13 @@ run_program14() { #Aggiunta riga comparazione per i raw
           echo "$((i + 1)). ${files_csv[$i]}"
       done
 
-      # Chiedi all'utente di inserire il nome del file
-      read -p "Inserisci il nome del file .csv da selezionare: " nome_file_csv
-      outputName=""
-
-      # Verifica se il file selezionato esiste nella lista completa
-      for file in "${files_csv[@]}"; do
-          if [ "$(basename "$file")" == "$nome_file_csv" ]; then
-              outputName="$file"
-              outputName=$(basename "$outputName" .csv)
-              echo "Hai selezionato: $outputName"
-              break
-          fi
-      done
+      # Chiedi all'utente di selezionare l'indice del file
+      read -p "Inserisci l'indice del file .csv da selezionare: " index
+      outputName="${files_csv[$((index-1))]}"
+      outputName=$(basename "$outputName" .csv)
 
       if [ -z "$outputName" ]; then
-          echo "Errore: Il file '$nome_file_csv' non esiste nella cartella csv/."
+          echo "Errore: Indice non valido."
           return 1
       fi
   else
