@@ -562,19 +562,19 @@ run_program14() { #Aggiunta riga comparazione per i raw
   echo "Seleziona un file dalla cartella samples/ o file_compressed/"
 
   # Elenco dei file .txt nella cartella samples e file_compressed
-  files=($(ls samples/ file_compressed/ 2>/dev/null))
+  files=($(find samples/ file_compressed/ -type f -name "*.txt" 2>/dev/null))
 
   if [ ${#files[@]} -gt 0 ]; then
       echo "File disponibili nelle cartelle samples/ e file_compressed/:"
       for i in "${!files[@]}"; do
-          echo "$((i + 1)). $(basename "${files[$i]}")"
+          echo "$((i + 1)). ${files[$i]}"
       done
 
       # Chiedi all'utente di inserire il nome del file
       read -p "Inserisci il nome del file .txt da selezionare: " nome_file
       inOrigin=""
 
-      # Verifica se il file selezionato esiste nella cartella
+      # Verifica se il file selezionato esiste nella lista completa
       for file in "${files[@]}"; do
           if [ "$(basename "$file")" == "$nome_file" ]; then
               inOrigin="$file"
@@ -587,11 +587,11 @@ run_program14() { #Aggiunta riga comparazione per i raw
           echo "Errore: Il file '$nome_file' non esiste nelle cartelle samples/ o file_compressed/."
           return 1
       fi
-      # Chiedi all'utente di inserire il nome del file
-      read -p "Inserisci il nome del file da selezionare: " nome_file
+
+      read -p "Inserisci il nome del file da selezionare per inComp: " nome_file
       inComp=""
 
-      # Verifica se il file selezionato esiste nella cartella
+      # Verifica se il file selezionato esiste nella lista completa
       for file in "${files[@]}"; do
           if [ "$(basename "$file")" == "$nome_file" ]; then
               inComp="$file"
@@ -610,28 +610,26 @@ run_program14() { #Aggiunta riga comparazione per i raw
   fi
 
 
-
   # Passaggi per selezionare il file .csv dalla cartella csv
   echo "Seleziona un file .csv dalla cartella csv/"
 
   # Elenco dei file .csv nella cartella csv
-  files_csv=($(ls csv/*.csv 2>/dev/null))
+  files_csv=($(find csv/ -type f -name "*.csv" 2>/dev/null))
 
   if [ ${#files_csv[@]} -gt 0 ]; then
       echo "File disponibili nella cartella csv/:"
       for i in "${!files_csv[@]}"; do
-          echo "$((i + 1)). $(basename "${files_csv[$i]}")"
+          echo "$((i + 1)). ${files_csv[$i]}"
       done
 
       # Chiedi all'utente di inserire il nome del file
       read -p "Inserisci il nome del file .csv da selezionare: " nome_file_csv
       outputName=""
 
-      # Verifica se il file selezionato esiste nella cartella
+      # Verifica se il file selezionato esiste nella lista completa
       for file in "${files_csv[@]}"; do
           if [ "$(basename "$file")" == "$nome_file_csv" ]; then
               outputName="$file"
-              # Rimuovi l'estensione .csv dal nome del file
               outputName=$(basename "$outputName" .csv)
               echo "Hai selezionato: $outputName"
               break
@@ -653,11 +651,9 @@ run_program14() { #Aggiunta riga comparazione per i raw
   echo "File inComp selezionato: $inComp"
   echo "File outputName selezionato: $outputName"
 
-  
   #esegui il comando con i percorsi completi
-  ./DNAStructureInfo/mainDNAStructureInfo --type C --typeOut C --outputName csv/"${outputName}" --inOrigin "${inOrigin}" --inComp "${inComp}"
+  ./DNAStructureInfo/mainDNAStructureInfo --type C --typeOut C --outputName csv/"${outputName}" --inOrigin "$inOrigin" --inComp "$inComp"
   pwd
-
 
 }
 
