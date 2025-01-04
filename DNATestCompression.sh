@@ -167,7 +167,7 @@ run_program4() {
 }
 
 
-run_program5() {
+run_program5() { # compressione
   clear
   # Verifica se la cartella esiste
   if [ -d "file_compressed" ]; then
@@ -381,7 +381,7 @@ run_program9() {
   cd -
 }
 
-run_program10() {
+run_program10() { 
   # Directory dei file .eds
   SAMPLE_DIR="samples/"
 
@@ -557,15 +557,16 @@ run_program13() { #Aggiunta riga individuale per i raw
   ./DNAStructureInfo/mainDNAStructureInfo --type I --typeOut C --outputName csv/"${outputName}" --inOrigin samples/"${inOrigin}"
   pwd
 }
-run_program14() { #Aggiunta riga comparazione per i raw
-  clear    # Passaggi per selezionare il file .txt dalla cartella samples
-  echo "Seleziona un file dalla cartella samples/"
 
-  # Elenco dei file .txt nella cartella samples
-  files=($(ls samples/ 2>/dev/null))
+run_program14() { #Aggiunta riga comparazione per i raw
+  clear    # Passaggi per selezionare il file .txt dalla cartella samples e file_compressed
+  echo "Seleziona un file dalla cartella samples/ o file_compressed/"
+
+  # Elenco dei file .txt nella cartella samples e file_compressed
+  files=($(ls samples/ file_compressed/ 2>/dev/null))
 
   if [ ${#files[@]} -gt 0 ]; then
-      echo "File disponibili nella cartella samples/:"
+      echo "File disponibili nelle cartelle samples/ e file_compressed/:"
       for i in "${!files[@]}"; do
           echo "$((i + 1)). $(basename "${files[$i]}")"
       done
@@ -577,14 +578,14 @@ run_program14() { #Aggiunta riga comparazione per i raw
       # Verifica se il file selezionato esiste nella cartella
       for file in "${files[@]}"; do
           if [ "$(basename "$file")" == "$nome_file" ]; then
-              inOrigin="$nome_file"
-              echo "Hai selezionato come inOrigin: $nome_file"
+              inOrigin="$file"
+              echo "Hai selezionato come inOrigin: $file"
               break
           fi
       done
 
       if [ -z "$inOrigin" ]; then
-          echo "Errore: Il file '$nome_file' non esiste nella cartella samples/."
+          echo "Errore: Il file '$nome_file' non esiste nelle cartelle samples/ o file_compressed/."
           return 1
       fi
       # Chiedi all'utente di inserire il nome del file
@@ -594,18 +595,18 @@ run_program14() { #Aggiunta riga comparazione per i raw
       # Verifica se il file selezionato esiste nella cartella
       for file in "${files[@]}"; do
           if [ "$(basename "$file")" == "$nome_file" ]; then
-              inComp="$nome_file"
-              echo "Hai selezionato come inComp: $nome_file"
+              inComp="$file"
+              echo "Hai selezionato come inComp: $file"
               break
           fi
       done
 
       if [ -z "$inComp" ]; then
-          echo "Errore: Il file '$nome_file' non esiste nella cartella samples/."
+          echo "Errore: Il file '$nome_file' non esiste nelle cartelle samples/ o file_compressed/."
           return 1
       fi
   else
-      echo "Nessun file .txt trovato nella cartella samples/."
+      echo "Nessun file .txt trovato nelle cartelle samples/ o file_compressed/."
       return 1
   fi
 
@@ -655,12 +656,12 @@ run_program14() { #Aggiunta riga comparazione per i raw
 
   
   #esegui il comando
-  ./DNAStructureInfo/mainDNAStructureInfo --type C --typeOut C --outputName csv/"${outputName}" --inOrigin samples/"${inOrigin}" --inComp samples/"${inComp}"
+  ./DNAStructureInfo/mainDNAStructureInfo --type C --typeOut C --outputName csv/"${outputName}" --inOrigin "${inOrigin}" --inComp "${inComp}"
   pwd
 
 
-
 }
+
 
 run_program15() {
 
