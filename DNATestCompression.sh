@@ -482,7 +482,7 @@ run_program13() { #Aggiunta riga individuale per i raw
   echo "Seleziona un file .txt dalla cartella samples/"
 
   # Elenco dei file .txt nella cartella samples
-  files=($(ls samples/*.txt 2>/dev/null))
+  files=($(ls samples/ 2>/dev/null))
 
   if [ ${#files[@]} -gt 0 ]; then
       echo "File disponibili nella cartella samples/:"
