@@ -21,6 +21,7 @@ show_menu() {
   echo -e "| \e[32m13)\e[0m Aggiungi riga individuale in csv |" 
   echo -e "| \e[32m14)\e[0m Aggiungi riga di confronto csv   |" 
   echo -e "| \e[32m15)\e[0m Rimuovi ultima riga in csv       |" 
+  echo -e "| \e[32m16)\e[0m Calcolo numero e tasso run       |" 
   echo -e "| \e[32m0)\e[0m Esci                              |"
   echo "----------------------------------------"
 }
@@ -660,6 +661,10 @@ run_program15() {
 
 }
 
+run_program16() {
+
+
+}
 
 
 ## START -------------------------------------------------------------------------------------------------------------
@@ -737,6 +742,9 @@ while true; do
       ;;
     15)
       run_program15
+      ;;
+    15)
+      run_program16
       ;;
     0)
       clear
