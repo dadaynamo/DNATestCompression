@@ -477,87 +477,79 @@ run_program12() {
 
  
 }
-run_program13() { #Aggiunta riga individuale per i raw
-  clear    # Passaggi per selezionare il file .txt dalla cartella samples
+run_program13() {
+  clear
   echo "Seleziona un file .txt dalla cartella samples/"
 
-  # Elenco dei file .txt nella cartella samples
-  files=($(ls samples/ 2>/dev/null))
+  # Ottieni la lista dei file .txt
+  mapfile -t files < <(find samples/ -maxdepth 1 -type f -name "*")
 
-  if [ ${#files[@]} -gt 0 ]; then
-      echo "File disponibili nella cartella samples/:"
-      for i in "${!files[@]}"; do
-          echo "$((i + 1)). $(basename "${files[$i]}")"
-      done
-
-      # Chiedi all'utente di inserire il nome del file
-      read -p "Inserisci il nome del file .txt da selezionare: " nome_file
-      inOrigin=""
-
-      # Verifica se il file selezionato esiste nella cartella
-      for file in "${files[@]}"; do
-          if [ "$(basename "$file")" == "$nome_file" ]; then
-              inOrigin="$nome_file"
-              echo "Hai selezionato: $nome_file"
-              break
-          fi
-      done
-
-      if [ -z "$inOrigin" ]; then
-          echo "Errore: Il file '$nome_file' non esiste nella cartella samples/."
-          return 1
-      fi
-  else
+  if [ ${#files[@]} -eq 0 ]; then
       echo "Nessun file .txt trovato nella cartella samples/."
       return 1
   fi
 
-  # Passaggi per selezionare il file .csv dalla cartella csv
-  echo "Seleziona un file .csv dalla cartella csv/"
+  # Mostra la lista dei file disponibili
+  for i in "${!files[@]}"; do
+      echo "$((i + 1)). $(basename "${files[$i]}")"
+  done
 
-  # Elenco dei file .csv nella cartella csv
-  files_csv=($(ls csv/*.csv 2>/dev/null))
-
-  if [ ${#files_csv[@]} -gt 0 ]; then
-      echo "File disponibili nella cartella csv/:"
-      for i in "${!files_csv[@]}"; do
-          echo "$((i + 1)). $(basename "${files_csv[$i]}")"
-      done
-
-      # Chiedi all'utente di inserire il nome del file
-      read -p "Inserisci il nome del file .csv da selezionare: " nome_file_csv
-      outputName=""
-
-      # Verifica se il file selezionato esiste nella cartella
-      for file in "${files_csv[@]}"; do
-          if [ "$(basename "$file")" == "$nome_file_csv" ]; then
-              outputName="$file"
-              # Rimuovi l'estensione .csv dal nome del file
-              outputName=$(basename "$outputName" .csv)
-              echo "Hai selezionato: $outputName"
-              break
-          fi
-      done
-
-      if [ -z "$outputName" ]; then
-          echo "Errore: Il file '$nome_file_csv' non esiste nella cartella csv/."
+  # Input utente per la selezione
+  read -p "Inserisci il numero o il nome del file .txt: " input
+  if [[ "$input" =~ ^[0-9]+$ ]]; then
+      if (( input >= 1 && input <= ${#files[@]} )); then
+          inOrigin="${files[input - 1]}"  # Prende il percorso completo
+      else
+          echo "Numero non valido!"
           return 1
       fi
   else
+      inOrigin="samples/$input"
+      if [[ ! -f "$inOrigin" ]]; then
+          echo "Errore: Il file '$input' non esiste nella cartella samples/."
+          return 1
+      fi
+  fi
+
+  echo "Hai selezionato: $(basename "$inOrigin")"
+
+  # Selezione file CSV
+  echo "Seleziona un file .csv dalla cartella csv/"
+  mapfile -t files_csv < <(find csv/ -maxdepth 1 -type f -name "*.csv")
+
+  if [ ${#files_csv[@]} -eq 0 ]; then
       echo "Nessun file .csv trovato nella cartella csv/."
       return 1
   fi
 
-  # Se tutto è andato a buon fine, stampa OK
-  echo "OK"
-  echo "File inOrigin selezionato: $inOrigin"
-  echo "File outputName selezionato: $outputName"
+  for i in "${!files_csv[@]}"; do
+      echo "$((i + 1)). $(basename "${files_csv[$i]}")"
+  done
 
-  # ./DNAStructureInfo/mainDNAStructureInfo --type I --typeOut C --profile A --outputName csv/test --inOrigin samples/smalldna.txt
-  #esegui il comando
-  ./DNAStructureInfo/mainDNAStructureInfo --type I --typeOut C --outputName csv/"${outputName}" --inOrigin samples/"${inOrigin}"
-  pwd
+  read -p "Inserisci il numero o il nome del file .csv: " input_csv
+  if [[ "$input_csv" =~ ^[0-9]+$ ]]; then
+      if (( input_csv >= 1 && input_csv <= ${#files_csv[@]} )); then
+          outputName="${files_csv[input_csv - 1]}"
+      else
+          echo "Numero non valido!"
+          return 1
+      fi
+  else
+      outputName="csv/$input_csv"
+      if [[ ! -f "$outputName" ]]; then
+          echo "Errore: Il file '$input_csv' non esiste nella cartella csv/."
+          return 1
+      fi
+  fi
+
+  # Rimuovi estensione .csv dal nome
+  outputName=$(basename "$outputName" .csv)
+  echo "Hai selezionato: $outputName"
+
+  # Esegui il comando
+  ./DNAStructureInfo/mainDNAStructureInfo --type I --typeOut C --outputName "csv/${outputName}" --inOrigin "$inOrigin"
 }
+
 run_program14() { #Aggiunta riga comparazione per i raw
   clear    # Passaggi per selezionare il file da samples e file_compressed
   echo "Seleziona un file dalla cartella samples/ o file_compressed/"
